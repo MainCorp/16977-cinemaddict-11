@@ -318,8 +318,8 @@
     return cards;
   };
 
-  const render = (container, template, how = `beforeend`) => {
-    container.insertAdjacentHTML(how, template);
+  const render = (container, template, place = `beforeend`) => {
+    container.insertAdjacentHTML(place, template);
   };
 
   const bodyPage = document.querySelector(`body`);
