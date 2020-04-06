@@ -361,5 +361,5 @@
   render(bodyOfPage, detailPopup);
 
   const filmDetails = bodyOfPage.querySelector(`.film-details`);
-  filmDetails.style.display = 'none';
+  filmDetails.style.display = `none`;
 })();
