@@ -333,7 +333,6 @@
   const loadMoreBtn = templateCustomLoadMoreBtn();
   const cardTopRated = templateCustomCardTopRated();
   const cardMostCommented = templateCustomCardMostCommented();
-  const detailPopup = templateCustomDetailPopup();
   const content = templateCustomFilms();
   const topRatedFilms = templateCustomExtraFilms(`Top rated`, createSomeCards(cardTopRated, COUNT_EXTRA_FILMS));
   const mostCommentedFilms = templateCustomExtraFilms(`Most commented`, createSomeCards(cardMostCommented, COUNT_EXTRA_FILMS));
@@ -363,7 +362,4 @@
   render(filmsWrap, mostCommentedFilms);
 
   render(bodyPage, detailPopup);
-
-  const filmDetails = bodyPage.querySelector(`.film-details`);
-  filmDetails.style.display = `none`;
 })();
