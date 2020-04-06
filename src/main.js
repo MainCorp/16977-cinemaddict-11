@@ -296,13 +296,7 @@
     `);
   };
 
-  const templateCustomExtraFilms = (title, item, count) => {
-    let cards = ``;
-
-    for (let i = 0; i < count; i++) {
-      cards += item;
-    }
-
+  const templateCustomExtraFilms = (title, cards) => {
     return (`
       <section class="films-list--extra">
         <h2 class="films-list__title">${title}</h2>
@@ -314,13 +308,23 @@
     `);
   };
 
+  const createSomeCards = (item, count) => {
+    let cards = ``;
+
+    for (let i = 0; i < count; i++) {
+      cards += item;
+    }
+
+    return cards;
+  };
+
   const render = (container, template, how = `beforeend`) => {
     container.insertAdjacentHTML(how, template);
   };
 
-  const bodyOfPage = document.querySelector(`body`);
-  const headerOfPage = bodyOfPage.querySelector(`.header`);
-  const mainOfPage = bodyOfPage.querySelector(`.main`);
+  const bodyPage = document.querySelector(`body`);
+  const headerPage = bodyPage.querySelector(`.header`);
+  const mainPage = bodyPage.querySelector(`.main`);
 
   const rank = templateCustomRank();
   const menu = templateCustomMenu();
@@ -331,20 +335,20 @@
   const cardMostCommented = templateCustomCardMostCommented();
   const detailPopup = templateCustomDetailPopup();
   const content = templateCustomFilms();
-  const topRatedFilms = templateCustomExtraFilms(`Top rated`, cardTopRated, COUNT_EXTRA_FILMS);
-  const mostCommentedFilms = templateCustomExtraFilms(`Most commented`, cardMostCommented, COUNT_EXTRA_FILMS);
+  const topRatedFilms = templateCustomExtraFilms(`Top rated`, createSomeCards(cardTopRated, COUNT_EXTRA_FILMS));
+  const mostCommentedFilms = templateCustomExtraFilms(`Most commented`, createSomeCards(cardMostCommented, COUNT_EXTRA_FILMS));
 
 
-  render(headerOfPage, rank);
-  render(mainOfPage, menu, `afterbegin`);
+  render(headerPage, rank);
+  render(mainPage, menu, `afterbegin`);
 
-  const mainNavigationContainer = mainOfPage.querySelector(`.main-navigation`);
+  const mainNavigationContainer = mainPage.querySelector(`.main-navigation`);
   render(mainNavigationContainer, sort, `afterend`);
 
-  const sortContainer = mainOfPage.querySelector(`.sort`);
+  const sortContainer = mainPage.querySelector(`.sort`);
   render(sortContainer, content, `afterend`);
 
-  const filmsWrap = mainOfPage.querySelector(`.films`);
+  const filmsWrap = mainPage.querySelector(`.films`);
   const filmsLists = filmsWrap.querySelector(`.films-list`);
   const filmsCoontainer = filmsLists.querySelector(`.films-list__container`);
 
@@ -358,8 +362,8 @@
 
   render(filmsWrap, mostCommentedFilms);
 
-  render(bodyOfPage, detailPopup);
+  render(bodyPage, detailPopup);
 
-  const filmDetails = bodyOfPage.querySelector(`.film-details`);
+  const filmDetails = bodyPage.querySelector(`.film-details`);
   filmDetails.style.display = `none`;
 })();
