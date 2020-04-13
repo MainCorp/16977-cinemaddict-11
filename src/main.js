@@ -1,3 +1,5 @@
+import {createSomeCards} from "./components/utils.js";
+
 import {templateCustomRank} from "./components/rank.js";
 import {templateCustomMenu} from "./components/menu.js";
 import {templateCustomSort} from "./components/sort.js";
@@ -8,8 +10,6 @@ import {templateCustomCardMostCommented} from "./components/card-most-commented.
 import {templateCustomDetailPopup} from "./components/detail-popup.js";
 import {templateCustomFilms} from "./components/films.js";
 import {templateCustomExtraFilms} from "./components/extra-films.js";
-
-import {createSomeCards} from "./components/utils.js";
 
 const COUNT_FILMS = 5;
 const COUNT_EXTRA_FILMS = 2;
@@ -30,32 +30,20 @@ const loadMoreBtn = templateCustomLoadMoreBtn();
 const cardTopRated = templateCustomCardTopRated();
 const cardMostCommented = templateCustomCardMostCommented();
 const detailPopup = templateCustomDetailPopup();
-const content = templateCustomFilms();
+const content = templateCustomFilms(createSomeCards(card, COUNT_FILMS));
 const topRatedFilms = templateCustomExtraFilms(`Top rated`, createSomeCards(cardTopRated, COUNT_EXTRA_FILMS));
 const mostCommentedFilms = templateCustomExtraFilms(`Most commented`, createSomeCards(cardMostCommented, COUNT_EXTRA_FILMS));
 
 
 render(headerPage, rank);
-render(mainPage, menu, `afterbegin`);
-
-const mainNavigationContainer = mainPage.querySelector(`.main-navigation`);
-render(mainNavigationContainer, sort, `afterend`);
-
-const sortContainer = mainPage.querySelector(`.sort`);
-render(sortContainer, content, `afterend`);
+render(mainPage, menu);
+render(mainPage, sort);
+render(mainPage, content);
 
 const filmsWrap = mainPage.querySelector(`.films`);
 const filmsLists = filmsWrap.querySelector(`.films-list`);
-const filmsCoontainer = filmsLists.querySelector(`.films-list__container`);
-
-for (let i = 0; i < COUNT_FILMS; i++) {
-  render(filmsCoontainer, card);
-}
 
 render(filmsLists, loadMoreBtn);
-
 render(filmsWrap, topRatedFilms);
-
 render(filmsWrap, mostCommentedFilms);
-
 render(bodyPage, detailPopup);
