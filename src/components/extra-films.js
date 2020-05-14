@@ -1,11 +1,15 @@
 export const templateCustomExtraFilms = (title, cards) => {
-  return (`
-    <section class="films-list--extra">
-      <h2 class="films-list__title">${title}</h2>
+  if (cards) {
+    return (`
+      <section class="films-list--extra ">
+        <h2 class="films-list__title">${title}</h2>
 
-      <div class="films-list__container">
-        ${cards}
-      </div>
-    </section>
-  `);
+        <div class="films-list__container">
+          ${cards}
+        </div>
+      </section>
+      `);
+  } else {
+    return ``;
+  }
 };
