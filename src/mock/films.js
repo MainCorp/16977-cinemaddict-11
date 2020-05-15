@@ -84,9 +84,11 @@ const filmPosters = [
 
 const filmDescriptionText = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
 
-const filmSentence = filmDescriptionText.split(`.`).filter((el) => {
-  return el.length;
-}).map((text) => {
+const filmSentence = filmDescriptionText.split(`. `).map((text) => {
+  if (text.slice(-1) === `.`) {
+    text = text.substr(0, text.length - 1);
+  }
+
   return text.length !== 0 ? text.trim() + `.` : false;
 });
 
@@ -109,15 +111,7 @@ const createRuntime = (num) => {
   const hours = Math.floor(num / 60);
   const minutes = num % 60;
 
-  if (hours > 0 && minutes > 0) {
-    return hours + `h ` + minutes + `m`;
-  } else if (hours === 0 && minutes > 0) {
-    return minutes + `m`;
-  } else if (hours > 0 && minutes === 0) {
-    return hours + `h`;
-  } else {
-    return ``;
-  }
+  return hours > 0 ? hours + `h ` + minutes + `m` : minutes + `m`;
 };
 
 const generateFilm = () => {

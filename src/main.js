@@ -8,8 +8,6 @@ import {templateCustomMenu} from "./components/menu.js";
 import {templateCustomSort} from "./components/sort.js";
 import {templateCustomCard} from "./components/card.js";
 import {templateCustomLoadMoreBtn} from "./components/load-more-btn.js";
-import {templateCustomCardTopRated} from "./components/card-top-rated.js";
-import {templateCustomCardMostCommented} from "./components/card-most-commented.js";
 import {templateCustomDetailPopup} from "./components/detail-popup.js";
 import {templateCustomFilms} from "./components/films.js";
 import {templateCustomExtraFilms} from "./components/extra-films.js";
@@ -26,9 +24,13 @@ const mainPage = bodyPage.querySelector(`.main`);
 
 const films = generateFilmList(COUNT_FILMS);
 
-const content = templateCustomFilms(createSomeCards(templateCustomCard, films, countFilms));
-const topRatedFilms = templateCustomExtraFilms(`Top rated`, createSomeCards(templateCustomCardTopRated, filterRatedFilms(films), COUNT_EXTRA_FILMS));
-const mostCommentedFilms = templateCustomExtraFilms(`Most commented`, createSomeCards(templateCustomCardMostCommented, filterMostCommentedFilms(films), COUNT_EXTRA_FILMS));
+const strDefaultFilms = createSomeCards(templateCustomCard, films, countFilms);
+const strTopRatedFilms = createSomeCards(templateCustomCard, filterRatedFilms(films), COUNT_EXTRA_FILMS, `film_info.total_rating`);
+const strMostCommentedFilms = createSomeCards(templateCustomCard, filterMostCommentedFilms(films), COUNT_EXTRA_FILMS, `comments.length`);
+
+const content = templateCustomFilms(strDefaultFilms);
+const topRatedFilms = strTopRatedFilms && templateCustomExtraFilms(`Top rated`, strTopRatedFilms);
+const mostCommentedFilms = strMostCommentedFilms && templateCustomExtraFilms(`Most commented`, strMostCommentedFilms);
 
 
 render(headerPage, templateCustomRank());

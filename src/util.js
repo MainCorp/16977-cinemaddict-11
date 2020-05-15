@@ -13,39 +13,60 @@ const createRandomCollection = (collection, min, max, param) => {
   let sentences = ``;
   let delimiter = param;
 
+  const uniqueValue = new Set();
+
   if (!delimiter) {
     delimiter = ` `;
   }
 
   for (let i = 0; i < maxText; i++) {
-    sentences += collection[Math.floor(Math.random() * collection.length)] + delimiter;
+    uniqueValue.add(collection[Math.floor(Math.random() * collection.length)] + delimiter);
   }
 
+  sentences = Array.from(uniqueValue).join(``);
+
   if (delimiter === param) {
-    sentences = sentences.substring(0, sentences.length - 2);
+    sentences = sentences.substring(0, sentences.length - delimiter.length);
   }
 
   return sentences;
 };
 
-const createSomeCards = (tmp, count, current) => {
-  let cards = ``;
+const createSomeCards = (tmp, current, count, path) => {
+  const keys = String(path).split(`.`);
 
-  for (let i = 0; i < current; i++) {
-    cards += tmp(count[i]);
+  let cards = ``;
+  let isValidData;
+
+  if (path) {
+    isValidData = current.filter((item) => {
+      let currentElement = item;
+
+      for (let i = 0; i < keys.length; i++) {
+        currentElement = currentElement[keys[i]];
+      }
+
+      return !!Number(currentElement);
+    });
+
+    if (isValidData.length) {
+      for (let i = 0; i < count; i++) {
+        cards += tmp(isValidData[i]);
+      }
+    }
+
+    return cards;
+  }
+
+  for (let j = 0; j < count; j++) {
+    cards += tmp(current[j]);
   }
 
   return cards;
 };
 
 const filterRatedFilms = (data) => {
-  const clone = [];
-
-  for (let key in data) {
-    if (data.hasOwnProperty(key)) {
-      clone[key] = data[key];
-    }
-  }
+  const clone = Object.assign([], data);
 
   return clone.sort((a, b) => {
     return Number(b.film_info.total_rating) - Number(a.film_info.total_rating);
@@ -53,13 +74,7 @@ const filterRatedFilms = (data) => {
 };
 
 const filterMostCommentedFilms = (data) => {
-  const clone = [];
-
-  for (let key in data) {
-    if (data.hasOwnProperty(key)) {
-      clone[key] = data[key];
-    }
-  }
+  const clone = Object.assign([], data);
 
   return clone.sort((a, b) => {
     return Number(b.comments.length) - Number(a.comments.length);
@@ -88,4 +103,11 @@ const retrieveDate = (str) => {
   };
 };
 
-export {getRandomNumber, createSomeCards, createRandomCollection, generateDate, retrieveDate, filterRatedFilms, filterMostCommentedFilms};
+export {
+  getRandomNumber,
+  createSomeCards,
+  createRandomCollection,
+  generateDate, retrieveDate,
+  filterRatedFilms,
+  filterMostCommentedFilms
+};

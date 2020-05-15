@@ -36,5 +36,5 @@ export const templateCustomCard = (data) => {
         <button class="film-card__controls-item button film-card__controls-item--favorite ${isFavorite}">Mark as favorite</button>
       </form>
     </article>
-  `);
+    `);
 };
