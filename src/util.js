@@ -36,10 +36,10 @@ const createSomeCards = (tmp, current, count, path) => {
   const keys = String(path).split(`.`);
 
   let cards = ``;
-  let isValidData;
+  let validItems;
 
   if (path) {
-    isValidData = current.filter((item) => {
+    validItems = current.filter((item) => {
       let currentElement = item;
 
       for (let i = 0; i < keys.length; i++) {
@@ -49,9 +49,9 @@ const createSomeCards = (tmp, current, count, path) => {
       return !!Number(currentElement);
     });
 
-    if (isValidData.length) {
+    if (validItems.length) {
       for (let i = 0; i < count; i++) {
-        cards += tmp(isValidData[i]);
+        cards += tmp(validItems[i]);
       }
     }
 
@@ -103,11 +103,18 @@ const retrieveDate = (str) => {
   };
 };
 
+const generateCollectionComments = (comments, tmp) => {
+  return comments.map((item) => {
+    return tmp(item);
+  }).join(``);
+};
+
 export {
   getRandomNumber,
   createSomeCards,
   createRandomCollection,
   generateDate, retrieveDate,
   filterRatedFilms,
-  filterMostCommentedFilms
+  filterMostCommentedFilms,
+  generateCollectionComments
 };

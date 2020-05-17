@@ -1,5 +1,5 @@
 import {COUNT_FILMS, COUNT_EXTRA_FILMS, COUNT_SHOW_FILM_ON_START, COUNT_SHOW_FILM_BY_BTN} from "./const.js";
-import {createSomeCards, filterRatedFilms, filterMostCommentedFilms} from "./util.js";
+import {createSomeCards, filterRatedFilms, filterMostCommentedFilms, generateCollectionComments} from "./util.js";
 
 import {generateFilmList} from "./mock/films.js";
 
@@ -61,4 +61,4 @@ loadMoreBtn.addEventListener(`click`, (evt) => {
 
 render(filmsWrap, topRatedFilms);
 render(filmsWrap, mostCommentedFilms);
-render(bodyPage, templateCustomDetailPopup(films[0]));
+render(bodyPage, templateCustomDetailPopup(films[0], generateCollectionComments));

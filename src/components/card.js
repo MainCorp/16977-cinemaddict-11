@@ -7,7 +7,7 @@ export const templateCustomCard = (data) => {
   const title = data.film_info.title;
   const rating = data.film_info.total_rating;
   const runtime = data.film_info.runtime;
-  const genre = data.film_info.genre;
+  const genre = data.film_info.genre.join(`, `);
   const poster = data.film_info.poster;
   const description = data.film_info.description;
 
