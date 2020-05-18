@@ -32,37 +32,18 @@ const createRandomCollection = (collection, min, max, param) => {
   return sentences;
 };
 
-const createSomeCards = (tmp, current, count, path) => {
-  const keys = String(path).split(`.`);
-
+const createSomeCards = (tmp, current, count) => {
   let cards = ``;
-  let validItems;
-
-  if (path) {
-    validItems = current.filter((item) => {
-      let currentElement = item;
-
-      for (let i = 0; i < keys.length; i++) {
-        currentElement = currentElement[keys[i]];
-      }
-
-      return !!Number(currentElement);
-    });
-
-    if (validItems.length) {
-      for (let i = 0; i < count; i++) {
-        cards += tmp(validItems[i]);
-      }
-    }
-
-    return cards;
-  }
 
   for (let j = 0; j < count; j++) {
     cards += tmp(current[j]);
   }
 
   return cards;
+};
+
+const createArrayFromText = (text) => {
+  return text.split(`,`);
 };
 
 const filterRatedFilms = (data) => {
@@ -79,6 +60,22 @@ const filterMostCommentedFilms = (data) => {
   return clone.sort((a, b) => {
     return Number(b.comments.length) - Number(a.comments.length);
   });
+};
+
+const isTotalRatingFilm = (data) => {
+  const findValidData = data.some((item) => {
+    return item.film_info.total_rating;
+  });
+
+  return findValidData ? findValidData : ``;
+};
+
+const isMoreCommentFilm = (data) => {
+  const findValidData = data.some((item) => {
+    return item.comments.length;
+  });
+
+  return findValidData ? findValidData : ``;
 };
 
 const generateDate = () => {
@@ -116,5 +113,8 @@ export {
   generateDate, retrieveDate,
   filterRatedFilms,
   filterMostCommentedFilms,
-  generateCollectionComments
+  generateCollectionComments,
+  isTotalRatingFilm,
+  isMoreCommentFilm,
+  createArrayFromText
 };

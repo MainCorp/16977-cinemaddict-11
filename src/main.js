@@ -1,5 +1,18 @@
-import {COUNT_FILMS, COUNT_EXTRA_FILMS, COUNT_SHOW_FILM_ON_START, COUNT_SHOW_FILM_BY_BTN} from "./const.js";
-import {createSomeCards, filterRatedFilms, filterMostCommentedFilms, generateCollectionComments} from "./util.js";
+import {
+  COUNT_FILMS,
+  COUNT_EXTRA_FILMS,
+  COUNT_SHOW_FILM_ON_START,
+  COUNT_SHOW_FILM_BY_BTN
+} from "./const.js";
+
+import {
+  createSomeCards,
+  filterRatedFilms,
+  filterMostCommentedFilms,
+  generateCollectionComments,
+  isTotalRatingFilm,
+  isMoreCommentFilm
+} from "./util.js";
 
 import {generateFilmList} from "./mock/films.js";
 
@@ -25,8 +38,8 @@ const mainPage = bodyPage.querySelector(`.main`);
 const films = generateFilmList(COUNT_FILMS);
 
 const strDefaultFilms = createSomeCards(templateCustomCard, films, countFilms);
-const strTopRatedFilms = createSomeCards(templateCustomCard, filterRatedFilms(films), COUNT_EXTRA_FILMS, `film_info.total_rating`);
-const strMostCommentedFilms = createSomeCards(templateCustomCard, filterMostCommentedFilms(films), COUNT_EXTRA_FILMS, `comments.length`);
+const strTopRatedFilms = isTotalRatingFilm(films) && createSomeCards(templateCustomCard, filterRatedFilms(films), COUNT_EXTRA_FILMS);
+const strMostCommentedFilms = isMoreCommentFilm(films) && createSomeCards(templateCustomCard, filterMostCommentedFilms(films), COUNT_EXTRA_FILMS);
 
 const content = templateCustomFilms(strDefaultFilms);
 const topRatedFilms = strTopRatedFilms && templateCustomExtraFilms(`Top rated`, strTopRatedFilms);
