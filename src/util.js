@@ -8,32 +8,23 @@ const getRandomNumber = (min, max, param) => {
   return min + Math.floor(Math.random() * (max - min));
 };
 
-const createRandomCollection = (collection, min, max, param) => {
+const createRandomCollection = (collection, min, max) => {
   const maxText = getRandomNumber(min, max);
-  let sentences = ``;
-  let delimiter = param;
-
   const uniqueValue = new Set();
 
-  if (!delimiter) {
-    delimiter = ` `;
-  }
-
   for (let i = 0; i < maxText; i++) {
-    uniqueValue.add(collection[Math.floor(Math.random() * collection.length)] + delimiter);
+    uniqueValue.add(collection[Math.floor(Math.random() * collection.length)] + ` `);
   }
 
-  sentences = Array.from(uniqueValue).join(``);
-
-  if (delimiter === param) {
-    sentences = sentences.substring(0, sentences.length - delimiter.length);
-  }
-
-  return sentences;
+  return Array.from(uniqueValue);
 };
 
 const createSomeCards = (tmp, current, count) => {
   let cards = ``;
+
+  if (current.length === 0) {
+    return ``;
+  }
 
   for (let j = 0; j < count; j++) {
     cards += tmp(current[j]);
@@ -42,40 +33,36 @@ const createSomeCards = (tmp, current, count) => {
   return cards;
 };
 
-const createArrayFromText = (text) => {
-  return text.split(`,`);
-};
-
 const filterRatedFilms = (data) => {
   const clone = Object.assign([], data);
 
-  return clone.sort((a, b) => {
-    return Number(b.film_info.total_rating) - Number(a.film_info.total_rating);
+  const findValidData = data.some((item) => {
+    return item.film_info.total_rating;
   });
+
+  if (findValidData) {
+    return findValidData && clone.sort((a, b) => {
+      return Number(b.film_info.total_rating) - Number(a.film_info.total_rating);
+    });
+  } else {
+    return [];
+  }
 };
 
 const filterMostCommentedFilms = (data) => {
   const clone = Object.assign([], data);
 
-  return clone.sort((a, b) => {
-    return Number(b.comments.length) - Number(a.comments.length);
-  });
-};
-
-const isTotalRatingFilm = (data) => {
-  const findValidData = data.some((item) => {
-    return item.film_info.total_rating;
-  });
-
-  return findValidData ? findValidData : ``;
-};
-
-const isMoreCommentFilm = (data) => {
   const findValidData = data.some((item) => {
     return item.comments.length;
   });
 
-  return findValidData ? findValidData : ``;
+  if (findValidData) {
+    return clone.sort((a, b) => {
+      return Number(b.comments.length) - Number(a.comments.length);
+    });
+  } else {
+    return [];
+  }
 };
 
 const generateDate = () => {
@@ -113,8 +100,5 @@ export {
   generateDate, retrieveDate,
   filterRatedFilms,
   filterMostCommentedFilms,
-  generateCollectionComments,
-  isTotalRatingFilm,
-  isMoreCommentFilm,
-  createArrayFromText
+  generateCollectionComments
 };

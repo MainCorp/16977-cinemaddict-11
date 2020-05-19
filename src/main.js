@@ -9,9 +9,7 @@ import {
   createSomeCards,
   filterRatedFilms,
   filterMostCommentedFilms,
-  generateCollectionComments,
-  isTotalRatingFilm,
-  isMoreCommentFilm
+  generateCollectionComments
 } from "./util.js";
 
 import {generateFilmList} from "./mock/films.js";
@@ -38,8 +36,8 @@ const mainPage = bodyPage.querySelector(`.main`);
 const films = generateFilmList(COUNT_FILMS);
 
 const strDefaultFilms = createSomeCards(templateCustomCard, films, countFilms);
-const strTopRatedFilms = isTotalRatingFilm(films) && createSomeCards(templateCustomCard, filterRatedFilms(films), COUNT_EXTRA_FILMS);
-const strMostCommentedFilms = isMoreCommentFilm(films) && createSomeCards(templateCustomCard, filterMostCommentedFilms(films), COUNT_EXTRA_FILMS);
+const strTopRatedFilms = createSomeCards(templateCustomCard, filterRatedFilms(films), COUNT_EXTRA_FILMS);
+const strMostCommentedFilms = createSomeCards(templateCustomCard, filterMostCommentedFilms(films), COUNT_EXTRA_FILMS);
 
 const content = templateCustomFilms(strDefaultFilms);
 const topRatedFilms = strTopRatedFilms && templateCustomExtraFilms(`Top rated`, strTopRatedFilms);
