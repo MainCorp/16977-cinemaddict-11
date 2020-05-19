@@ -34,10 +34,13 @@ const headerPage = bodyPage.querySelector(`.header`);
 const mainPage = bodyPage.querySelector(`.main`);
 
 const films = generateFilmList(COUNT_FILMS);
+const collectionFilmsOnStart = films.slice(0, COUNT_SHOW_FILM_ON_START);
+const collectionRatedFilms = filterRatedFilms(films).slice(0, COUNT_EXTRA_FILMS);
+const collectionCommentedFilms = filterMostCommentedFilms(films).slice(0, COUNT_EXTRA_FILMS);
 
-const strDefaultFilms = createSomeCards(templateCustomCard, films, countFilms);
-const strTopRatedFilms = createSomeCards(templateCustomCard, filterRatedFilms(films), COUNT_EXTRA_FILMS);
-const strMostCommentedFilms = createSomeCards(templateCustomCard, filterMostCommentedFilms(films), COUNT_EXTRA_FILMS);
+const strDefaultFilms = createSomeCards(templateCustomCard, collectionFilmsOnStart);
+const strTopRatedFilms = createSomeCards(templateCustomCard, collectionRatedFilms);
+const strMostCommentedFilms = createSomeCards(templateCustomCard, collectionCommentedFilms);
 
 const content = templateCustomFilms(strDefaultFilms);
 const topRatedFilms = strTopRatedFilms && templateCustomExtraFilms(`Top rated`, strTopRatedFilms);
@@ -67,7 +70,7 @@ loadMoreBtn.addEventListener(`click`, (evt) => {
     loadMoreBtn.remove();
   }
 
-  render(container, createSomeCards(templateCustomCard, piece, piece.length));
+  render(container, createSomeCards(templateCustomCard, piece));
 });
 
 render(filmsWrap, topRatedFilms);

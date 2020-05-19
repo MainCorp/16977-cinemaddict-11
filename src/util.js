@@ -19,12 +19,9 @@ const createRandomCollection = (collection, min, max) => {
   return Array.from(uniqueValue);
 };
 
-const createSomeCards = (tmp, current, count) => {
+const createSomeCards = (tmp, current) => {
+  const count = current.length;
   let cards = ``;
-
-  if (current.length === 0) {
-    return ``;
-  }
 
   for (let j = 0; j < count; j++) {
     cards += tmp(current[j]);
@@ -40,13 +37,13 @@ const filterRatedFilms = (data) => {
     return item.film_info.total_rating;
   });
 
-  if (findValidData) {
-    return findValidData && clone.sort((a, b) => {
-      return Number(b.film_info.total_rating) - Number(a.film_info.total_rating);
-    });
-  } else {
-    return [];
+  if (!findValidData) {
+    return clone;
   }
+
+  return findValidData && clone.sort((a, b) => {
+    return Number(b.film_info.total_rating) - Number(a.film_info.total_rating);
+  });
 };
 
 const filterMostCommentedFilms = (data) => {
@@ -56,13 +53,13 @@ const filterMostCommentedFilms = (data) => {
     return item.comments.length;
   });
 
-  if (findValidData) {
-    return clone.sort((a, b) => {
-      return Number(b.comments.length) - Number(a.comments.length);
-    });
-  } else {
-    return [];
+  if (!findValidData) {
+    return clone;
   }
+
+  return clone.sort((a, b) => {
+    return Number(b.comments.length) - Number(a.comments.length);
+  });
 };
 
 const generateDate = () => {
