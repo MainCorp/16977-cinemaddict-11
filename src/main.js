@@ -9,25 +9,21 @@ import {
   createSomeCards,
   filterRatedFilms,
   filterMostCommentedFilms,
-  generateCollectionComments
+  render
 } from "./util.js";
 
 import {generateFilmList} from "./mock/films.js";
 
-import {templateCustomRank} from "./components/rank.js";
-import {templateCustomMenu} from "./components/menu.js";
-import {templateCustomSort} from "./components/sort.js";
-import {templateCustomCard} from "./components/card.js";
-import {templateCustomLoadMoreBtn} from "./components/load-more-btn.js";
-import {templateCustomDetailPopup} from "./components/detail-popup.js";
-import {templateCustomFilms} from "./components/films.js";
-import {templateCustomExtraFilms} from "./components/extra-films.js";
+import {Rank} from "./components/rank.js";
+import {Menu} from "./components/menu.js";
+import {Sort} from "./components/sort.js";
+import {FilmsBoard} from "./components/films.js";
+import {ExtraFilmsBoard} from "./components/extra-films.js";
+import {Card} from "./components/card.js";
+import {LoadMoreBtn} from "./components/load-more-btn.js";
 
 let countFilms = COUNT_SHOW_FILM_ON_START;
 
-const render = (container, template, place = `beforeend`) => {
-  container.insertAdjacentHTML(place, template);
-};
 
 const bodyPage = document.querySelector(`body`);
 const headerPage = bodyPage.querySelector(`.header`);
@@ -38,24 +34,27 @@ const collectionFilmsOnStart = films.slice(0, COUNT_SHOW_FILM_ON_START);
 const collectionRatedFilms = filterRatedFilms(films).slice(0, COUNT_EXTRA_FILMS);
 const collectionCommentedFilms = filterMostCommentedFilms(films).slice(0, COUNT_EXTRA_FILMS);
 
-const strDefaultFilms = createSomeCards(templateCustomCard, collectionFilmsOnStart);
-const strTopRatedFilms = createSomeCards(templateCustomCard, collectionRatedFilms);
-const strMostCommentedFilms = createSomeCards(templateCustomCard, collectionCommentedFilms);
+const fragmentDefaultFilms = createSomeCards(Card, collectionFilmsOnStart);
+const fragmentRatedFilms = createSomeCards(Card, collectionRatedFilms);
+const fragmentMostCommentedFilms = createSomeCards(Card, collectionCommentedFilms);
 
-const content = templateCustomFilms(strDefaultFilms);
-const topRatedFilms = strTopRatedFilms && templateCustomExtraFilms(`Top rated`, strTopRatedFilms);
-const mostCommentedFilms = strMostCommentedFilms && templateCustomExtraFilms(`Most commented`, strMostCommentedFilms);
+const content = new FilmsBoard().getElement();
+const topRatedFilms = collectionRatedFilms && new ExtraFilmsBoard(`Top rated`).getElement();
+const mostCommentedFilms = collectionCommentedFilms && new ExtraFilmsBoard(`Most commented`).getElement();
 
-
-render(headerPage, templateCustomRank());
-render(mainPage, templateCustomMenu(films));
-render(mainPage, templateCustomSort());
+render(headerPage, new Rank().getElement());
+render(mainPage, new Menu(films).getElement());
+render(mainPage, new Sort().getElement());
 render(mainPage, content);
+
+const filmsContainer = content.querySelector(`.films-list__container`);
+
+render(filmsContainer, fragmentDefaultFilms);
 
 const filmsWrap = mainPage.querySelector(`.films`);
 const filmsLists = filmsWrap.querySelector(`.films-list`);
 
-render(filmsLists, templateCustomLoadMoreBtn());
+render(filmsLists, new LoadMoreBtn().getElement());
 
 const loadMoreBtn = document.querySelector(`.films-list__show-more`);
 
@@ -70,9 +69,19 @@ loadMoreBtn.addEventListener(`click`, (evt) => {
     loadMoreBtn.remove();
   }
 
-  render(container, createSomeCards(templateCustomCard, piece));
+  render(container, createSomeCards(Card, piece));
 });
 
 render(filmsWrap, topRatedFilms);
+
+if (topRatedFilms) {
+  const ratedFilmsContainer = topRatedFilms.querySelector(`.films-list__container`);
+  render(ratedFilmsContainer, fragmentRatedFilms);
+}
+
 render(filmsWrap, mostCommentedFilms);
-render(bodyPage, templateCustomDetailPopup(films[0], generateCollectionComments));
+
+if (mostCommentedFilms) {
+  const commentedFilmsContainer = mostCommentedFilms.querySelector(`.films-list__container`);
+  render(commentedFilmsContainer, fragmentMostCommentedFilms);
+}

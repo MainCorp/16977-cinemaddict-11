@@ -1,4 +1,4 @@
-import {retrieveDate} from "../util.js";
+import {retrieveDate, createElement} from "../util.js";
 
 const templateCustomComment = (data) => {
   const date = retrieveDate(data.date);
@@ -8,8 +8,8 @@ const templateCustomComment = (data) => {
   const hours = date.hours;
   const minutes = date.minutes;
 
-  return (`
-    <li class="film-details__comment">
+  return (
+    `<li class="film-details__comment">
       <span class="film-details__comment-emoji">
         <img src="./images/emoji/${data.emotion}.png" width="55" height="55" alt="emoji-smile">
       </span>
@@ -21,8 +21,29 @@ const templateCustomComment = (data) => {
           <button class="film-details__comment-delete">Delete</button>
         </p>
       </div>
-    </li>
-    `);
+    </li>`
+  );
 };
 
-export {templateCustomComment};
+export class Comment {
+  constructor(comment) {
+    this._comment = comment;
+    this._element = null;
+  }
+
+  getTemplate(comments) {
+    return templateCustomComment(comments);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate(this._comment));
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

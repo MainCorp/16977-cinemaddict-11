@@ -1,6 +1,8 @@
-import {retrieveDate} from "../util.js";
+import {retrieveDate, createElement, render} from "../util.js";
 
-export const templateCustomCard = (data) => {
+import {DetailPopup} from "./detail-popup.js";
+
+const templateCustomCard = (data) => {
   const comments = data.comments;
   const countComments = comments.length;
 
@@ -18,8 +20,8 @@ export const templateCustomCard = (data) => {
   const isWatchlist = data.user_details.watchlist ? `film-card__controls-item--active` : ``;
   const isFavorite = data.user_details.favorite ? `film-card__controls-item--active` : ``;
 
-  return (`
-    <article class="film-card">
+  return (
+    `<article class="film-card">
       <h3 class="film-card__title">${title}</h3>
       <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
@@ -35,6 +37,59 @@ export const templateCustomCard = (data) => {
         <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${isWatchlist}">Mark as watched</button>
         <button class="film-card__controls-item button film-card__controls-item--favorite ${isFavorite}">Mark as favorite</button>
       </form>
-    </article>
-    `);
+    </article>`
+  );
 };
+
+export class Card {
+  constructor(film) {
+    this._film = film;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return templateCustomCard(this._film);
+  }
+
+  handlerOpenPopup(popup) {
+    const bodyPage = document.querySelector(`body`);
+
+    bodyPage.appendChild(popup.getElement());
+
+    const commentContainer = popup.getElement().querySelector(`.film-details__comments-list`);
+    render(commentContainer, popup.getComment());
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+
+      const poster = this._element.querySelector(`.film-card__poster`);
+      const title = this._element.querySelector(`.film-card__title`);
+      const comments = this._element.querySelector(`.film-card__comments`);
+
+      const popup = new DetailPopup(this._film);
+
+      poster.addEventListener(`click`, () => {
+        this.handlerOpenPopup(popup);
+      });
+      title.addEventListener(`click`, () => {
+        this.handlerOpenPopup(popup);
+      });
+      comments.addEventListener(`click`, () => {
+        this.handlerOpenPopup(popup);
+      });
+    }
+
+    return this._element;
+  }
+
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
+//
+// render(bodyPage, popup.getElement());
