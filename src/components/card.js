@@ -1,4 +1,4 @@
-import {retrieveDate, createElement, render} from "../util.js";
+import {retrieveDate, createElement} from "../util.js";
 
 import {DetailPopup} from "./detail-popup.js";
 
@@ -48,38 +48,41 @@ export class Card {
     this._element = null;
   }
 
+  _addEventOpenPopup() {
+    const poster = this._element.querySelector(`.film-card__poster`);
+    const title = this._element.querySelector(`.film-card__title`);
+    const comments = this._element.querySelector(`.film-card__comments`);
+
+    const popup = new DetailPopup(this._film);
+
+    poster.addEventListener(`click`, () => {
+      this.openPopup(popup);
+    });
+
+    title.addEventListener(`click`, () => {
+      this.openPopup(popup);
+    });
+
+    comments.addEventListener(`click`, () => {
+      this.openPopup(popup);
+    });
+  }
+
   getTemplate() {
     return templateCustomCard(this._film);
   }
 
-  handlerOpenPopup(popup) {
+  openPopup(popup) {
     const bodyPage = document.querySelector(`body`);
 
     bodyPage.appendChild(popup.getElement());
-
-    const commentContainer = popup.getElement().querySelector(`.film-details__comments-list`);
-    render(commentContainer, popup.getComment());
   }
 
   getElement() {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
 
-      const poster = this._element.querySelector(`.film-card__poster`);
-      const title = this._element.querySelector(`.film-card__title`);
-      const comments = this._element.querySelector(`.film-card__comments`);
-
-      const popup = new DetailPopup(this._film);
-
-      poster.addEventListener(`click`, () => {
-        this.handlerOpenPopup(popup);
-      });
-      title.addEventListener(`click`, () => {
-        this.handlerOpenPopup(popup);
-      });
-      comments.addEventListener(`click`, () => {
-        this.handlerOpenPopup(popup);
-      });
+      this._addEventOpenPopup();
     }
 
     return this._element;
@@ -90,6 +93,3 @@ export class Card {
     this._element = null;
   }
 }
-
-//
-// render(bodyPage, popup.getElement());

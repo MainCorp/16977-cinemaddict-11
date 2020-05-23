@@ -19,7 +19,6 @@ import {Menu} from "./components/menu.js";
 import {Sort} from "./components/sort.js";
 import {FilmsBoard} from "./components/films.js";
 import {ExtraFilmsBoard} from "./components/extra-films.js";
-import {Card} from "./components/card.js";
 import {LoadMoreBtn} from "./components/load-more-btn.js";
 
 let countFilms = COUNT_SHOW_FILM_ON_START;
@@ -34,9 +33,9 @@ const collectionFilmsOnStart = films.slice(0, COUNT_SHOW_FILM_ON_START);
 const collectionRatedFilms = filterRatedFilms(films).slice(0, COUNT_EXTRA_FILMS);
 const collectionCommentedFilms = filterMostCommentedFilms(films).slice(0, COUNT_EXTRA_FILMS);
 
-const fragmentDefaultFilms = createSomeCards(Card, collectionFilmsOnStart);
-const fragmentRatedFilms = createSomeCards(Card, collectionRatedFilms);
-const fragmentMostCommentedFilms = createSomeCards(Card, collectionCommentedFilms);
+const fragmentDefaultFilms = createSomeCards(collectionFilmsOnStart);
+const fragmentRatedFilms = createSomeCards(collectionRatedFilms);
+const fragmentMostCommentedFilms = createSomeCards(collectionCommentedFilms);
 
 const content = new FilmsBoard().getElement();
 const topRatedFilms = collectionRatedFilms && new ExtraFilmsBoard(`Top rated`).getElement();
@@ -69,7 +68,7 @@ loadMoreBtn.addEventListener(`click`, (evt) => {
     loadMoreBtn.remove();
   }
 
-  render(container, createSomeCards(Card, piece));
+  render(container, createSomeCards(piece));
 });
 
 render(filmsWrap, topRatedFilms);

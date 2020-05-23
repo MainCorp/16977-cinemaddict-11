@@ -1,3 +1,4 @@
+import {KEY_ESC} from "../const.js";
 import {retrieveDate, createElement} from "../util.js";
 import {Comment} from "./comments.js";
 
@@ -9,7 +10,7 @@ const generateGenres = (str) => {
   }).join(`,`);
 };
 
-const templateCustomDetailPopup = (data) => {
+const templateCustomDetailPopup = (data, collectionComments) => {
   const comments = data.comments;
   const countComments = data.comments.length;
 
@@ -121,6 +122,7 @@ const templateCustomDetailPopup = (data) => {
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${countComments}</span></h3>
 
             <ul class="film-details__comments-list">
+            ${collectionComments}
             </ul>
 
             <div class="film-details__new-comment">
@@ -166,33 +168,39 @@ export class DetailPopup {
     this._element = null;
   }
 
+  _handlerClosePopup(evt) {
+    const bodyPage = document.querySelector(`body`);
+    const closePopupBtn = this._element.querySelector(`.film-details__close-btn`);
+
+    if (evt.type === `keydown` && evt.keyCode === KEY_ESC) {
+      bodyPage.removeChild(this._element);
+      document.removeEventListener(`keydown`, this._handlerClosePopup);
+    } else if (evt.type === `click`) {
+      bodyPage.removeChild(this._element);
+      closePopupBtn.removeEventListener(`click`, this._handlerClosePopup);
+    }
+  }
+
+  _addEventClosePopup() {
+    const closePopupBtn = this._element.querySelector(`.film-details__close-btn`);
+
+    closePopupBtn.addEventListener(`click`, this._handlerClosePopup.bind(this));
+
+    document.addEventListener(`keydown`, this._handlerClosePopup.bind(this));
+  }
+
   getTemplate() {
-    return templateCustomDetailPopup(this._film, this._generateCollectionComment);
+    return templateCustomDetailPopup(this._film, new Comment(this._film.comments).generateCollectionComments());
   }
 
   getElement() {
     if (!this._element) {
-      this._element = createElement(this.getTemplate(this._film, this._generateCollectionComment));
+      this._element = createElement(this.getTemplate(this._film));
 
-      const closePopupBtn = this._element.querySelector(`.film-details__close-btn`);
-      const bodyPage = document.querySelector(`body`);
-
-      closePopupBtn.addEventListener(`click`, () => {
-        bodyPage.removeChild(this._element);
-      });
+      this._addEventClosePopup();
     }
 
     return this._element;
-  }
-
-  getComment() {
-    const fragment = document.createDocumentFragment();
-
-    this._comments.forEach((item) => {
-      fragment.appendChild(new Comment(item).getElement());
-    });
-
-    return fragment;
   }
 
   removeElement() {

@@ -1,5 +1,7 @@
 import {MONTHS} from "./const.js";
 
+import {Card} from "./components/card.js";
+
 const getRandomNumber = (min, max, param) => {
   if (param) {
     return (min + Math.random() * (max - min)).toFixed(1);
@@ -19,7 +21,7 @@ const createRandomCollection = (collection, min, max) => {
   return Array.from(uniqueValue);
 };
 
-const createSomeCards = (Card, current) => {
+const createSomeCards = (current) => {
   const count = current.length;
   let fragment = document.createDocumentFragment();
 
