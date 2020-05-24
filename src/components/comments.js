@@ -31,6 +31,16 @@ export class Comment {
     this._element = null;
   }
 
+  generateCollectionComments() {
+    this._comment.sort((a, b) => {
+      return Date.parse(b.date) - Date.parse(a.date);
+    });
+
+    return this._comment.reduce((acc, item) => {
+      return acc + this.getTemplate(item);
+    }, ``);
+  }
+
   getTemplate(comments) {
     return templateCustomComment(comments);
   }
