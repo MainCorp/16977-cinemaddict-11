@@ -168,18 +168,12 @@ export class DetailPopup {
   }
 
   _handlerClickClosePopup() {
-    const bodyPage = document.querySelector(`body`);
-
-    bodyPage.removeChild(this._element);
-    document.removeEventListener(`keydown`, this._handlerClosePopup);
+    this.closePopup();
   }
 
   _handlerKeyClosePopup(evt) {
-    const bodyPage = document.querySelector(`body`);
-
     if (evt.keyCode === KEY_ESC) {
-      bodyPage.removeChild(this._element);
-      document.removeEventListener(`keydown`, this._handlerClosePopup);
+      this.closePopup();
     }
   }
 
@@ -189,6 +183,15 @@ export class DetailPopup {
     closePopupBtn.addEventListener(`click`, this._handlerClickClosePopup.bind(this));
 
     document.addEventListener(`keydown`, this._handlerKeyClosePopup.bind(this));
+  }
+
+  closePopup() {
+    if (this._element) {
+      const bodyPage = document.querySelector(`body`);
+
+      bodyPage.removeChild(this._element);
+      document.removeEventListener(`keydown`, this._handlerClosePopup);
+    }
   }
 
   getTemplate() {
