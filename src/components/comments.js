@@ -36,9 +36,9 @@ export class Comment {
       return Date.parse(b.date) - Date.parse(a.date);
     });
 
-    return this._comment.map((item) => {
-      return this.getTemplate(item);
-    }).join(``);
+    return this._comment.reduce((acc, item) => {
+      return acc + this.getTemplate(item);
+    }, ``);
   }
 
   getTemplate(comments) {

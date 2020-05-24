@@ -164,29 +164,30 @@ const templateCustomDetailPopup = (data, collectionComments) => {
 export class DetailPopup {
   constructor(film) {
     this._film = film;
-    this._comments = film.comments;
     this._element = null;
   }
 
-  _handlerClosePopup(evt) {
+  _handlerClickClosePopup() {
     const bodyPage = document.querySelector(`body`);
-    const closePopupBtn = this._element.querySelector(`.film-details__close-btn`);
 
-    if (evt.type === `keydown` && evt.keyCode === KEY_ESC) {
+    bodyPage.removeChild(this._element);
+  }
+
+  _handlerKeyClosePopup(evt) {
+    const bodyPage = document.querySelector(`body`);
+
+    if (evt.keyCode === KEY_ESC) {
       bodyPage.removeChild(this._element);
       document.removeEventListener(`keydown`, this._handlerClosePopup);
-    } else if (evt.type === `click`) {
-      bodyPage.removeChild(this._element);
-      closePopupBtn.removeEventListener(`click`, this._handlerClosePopup);
     }
   }
 
   _addEventClosePopup() {
     const closePopupBtn = this._element.querySelector(`.film-details__close-btn`);
 
-    closePopupBtn.addEventListener(`click`, this._handlerClosePopup.bind(this));
+    closePopupBtn.addEventListener(`click`, this._handlerClickClosePopup.bind(this));
 
-    document.addEventListener(`keydown`, this._handlerClosePopup.bind(this));
+    document.addEventListener(`keydown`, this._handlerKeyClosePopup.bind(this));
   }
 
   getTemplate() {
