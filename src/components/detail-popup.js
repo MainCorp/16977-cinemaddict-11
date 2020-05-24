@@ -180,18 +180,20 @@ export class DetailPopup {
   _addEventClosePopup() {
     const closePopupBtn = this._element.querySelector(`.film-details__close-btn`);
 
-    closePopupBtn.addEventListener(`click`, this._handlerClickClosePopup.bind(this));
+    this._handlerClickClosePopup = this._handlerClickClosePopup.bind(this);
+    this._handlerKeyClosePopup = this._handlerKeyClosePopup.bind(this);
 
-    document.addEventListener(`keydown`, this._handlerKeyClosePopup.bind(this));
+    closePopupBtn.addEventListener(`click`, this._handlerClickClosePopup);
+    document.addEventListener(`keydown`, this._handlerKeyClosePopup);
   }
 
   closePopup() {
-    if (this._element) {
-      const bodyPage = document.querySelector(`body`);
+    const bodyPage = document.querySelector(`body`);
 
-      bodyPage.removeChild(this._element);
-      document.removeEventListener(`keydown`, this._handlerClosePopup);
-    }
+    bodyPage.removeChild(this._element);
+
+    document.removeEventListener(`keydown`, this._handlerKeyClosePopup);
+    this._element = null;
   }
 
   getTemplate() {
