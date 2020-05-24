@@ -171,6 +171,7 @@ export class DetailPopup {
     const bodyPage = document.querySelector(`body`);
 
     bodyPage.removeChild(this._element);
+    document.removeEventListener(`keydown`, this._handlerClosePopup);
   }
 
   _handlerKeyClosePopup(evt) {
