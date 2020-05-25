@@ -1,5 +1,7 @@
 import {MONTHS} from "./const.js";
 
+import {Card} from "./components/card.js";
+
 const getRandomNumber = (min, max, param) => {
   if (param) {
     return (min + Math.random() * (max - min)).toFixed(1);
@@ -19,15 +21,15 @@ const createRandomCollection = (collection, min, max) => {
   return Array.from(uniqueValue);
 };
 
-const createSomeCards = (tmp, current) => {
+const createSomeCards = (current) => {
   const count = current.length;
-  let cards = ``;
+  let fragment = document.createDocumentFragment();
 
   for (let j = 0; j < count; j++) {
-    cards += tmp(current[j]);
+    fragment.appendChild(new Card(current[j]).getElement());
   }
 
-  return cards;
+  return fragment;
 };
 
 const filterRatedFilms = (data) => {
@@ -38,7 +40,7 @@ const filterRatedFilms = (data) => {
   });
 
   if (!findValidData) {
-    return clone;
+    return ``;
   }
 
   return findValidData && clone.sort((a, b) => {
@@ -54,7 +56,7 @@ const filterMostCommentedFilms = (data) => {
   });
 
   if (!findValidData) {
-    return clone;
+    return ``;
   }
 
   return clone.sort((a, b) => {
@@ -84,11 +86,17 @@ const retrieveDate = (str) => {
   };
 };
 
-const generateCollectionComments = (comments, tmp) => {
-  return comments.map((item) => {
-    return tmp(item);
-  }).join(``);
+const createElement = (tmp) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = tmp;
+
+  return newElement.firstChild;
 };
+
+const render = (container, element) => {
+  container.append(element);
+};
+
 
 export {
   getRandomNumber,
@@ -97,5 +105,6 @@ export {
   generateDate, retrieveDate,
   filterRatedFilms,
   filterMostCommentedFilms,
-  generateCollectionComments
+  createElement,
+  render
 };

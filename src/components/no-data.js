@@ -1,18 +1,22 @@
 import {createElement} from "../util.js";
 
-const templateCustomLoadMoreBtn = () => {
+const templateNoData = () => {
   return (
-    `<button class="films-list__show-more">Show more</button>`
+    `<section class="films">
+      <section class="films-list">
+        <h2 class="films-list__title">There are no movies in our database</h2>
+      </section>
+    </section>`
   );
 };
 
-export class LoadMoreBtn {
+export class NoData {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return templateCustomLoadMoreBtn();
+    return templateNoData();
   }
 
   getElement() {
@@ -21,9 +25,5 @@ export class LoadMoreBtn {
     }
 
     return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

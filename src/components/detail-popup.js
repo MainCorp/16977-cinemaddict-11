@@ -1,5 +1,6 @@
-import {retrieveDate} from "../util.js";
-import {templateCustomComment} from "./comments.js";
+import {KEY_ESC} from "../const.js";
+import {retrieveDate, createElement} from "../util.js";
+import {Comment} from "./comments.js";
 
 const generateGenres = (str) => {
   const genres = str.split(`,`);
@@ -9,7 +10,7 @@ const generateGenres = (str) => {
   }).join(`,`);
 };
 
-const templateCustomDetailPopup = (data, generateCollectionComments) => {
+const templateCustomDetailPopup = (data, collectionComments) => {
   const comments = data.comments;
   const countComments = data.comments.length;
 
@@ -39,10 +40,8 @@ const templateCustomDetailPopup = (data, generateCollectionComments) => {
     return Date.parse(b.date) - Date.parse(a.date);
   });
 
-  const collectionComments = generateCollectionComments(comments, templateCustomComment);
-
-  return (`
-    <section class="film-details">
+  return (
+    `<section class="film-details">
       <form class="film-details__inner" action="" method="get">
         <div class="form-details__top-container">
           <div class="film-details__close">
@@ -123,7 +122,7 @@ const templateCustomDetailPopup = (data, generateCollectionComments) => {
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${countComments}</span></h3>
 
             <ul class="film-details__comments-list">
-              ${collectionComments}
+            ${collectionComments}
             </ul>
 
             <div class="film-details__new-comment">
@@ -158,8 +157,60 @@ const templateCustomDetailPopup = (data, generateCollectionComments) => {
           </section>
         </div>
       </form>
-    </section>
-  `);
+    </section>`
+  );
 };
 
-export {templateCustomDetailPopup};
+export class DetailPopup {
+  constructor(film) {
+    this._film = film;
+    this._element = null;
+  }
+
+  _handlerClickClosePopup() {
+    this.closePopup();
+  }
+
+  _handlerKeyClosePopup(evt) {
+    if (evt.keyCode === KEY_ESC) {
+      this.closePopup();
+    }
+  }
+
+  _addEventClosePopup() {
+    const closePopupBtn = this._element.querySelector(`.film-details__close-btn`);
+
+    this._handlerClickClosePopup = this._handlerClickClosePopup.bind(this);
+    this._handlerKeyClosePopup = this._handlerKeyClosePopup.bind(this);
+
+    closePopupBtn.addEventListener(`click`, this._handlerClickClosePopup);
+    document.addEventListener(`keydown`, this._handlerKeyClosePopup);
+  }
+
+  closePopup() {
+    const bodyPage = document.querySelector(`body`);
+
+    bodyPage.removeChild(this._element);
+
+    document.removeEventListener(`keydown`, this._handlerKeyClosePopup);
+    this._element = null;
+  }
+
+  getTemplate() {
+    return templateCustomDetailPopup(this._film, new Comment(this._film.comments).generateCollectionComments());
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate(this._film));
+
+      this._addEventClosePopup();
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
