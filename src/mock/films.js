@@ -1,5 +1,5 @@
 import {MAX_COUNT_REVIEWS} from "../const.js";
-import {getRandomNumber, createRandomCollection, generateDate} from "../util.js";
+import {getRandomNumber, createRandomCollection, generateDate} from "../utils/common.js";
 
 const producerName = [
   `Michael Badalucco`,

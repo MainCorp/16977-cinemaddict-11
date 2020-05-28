@@ -1,4 +1,4 @@
-import {createElement} from "../util.js";
+import {AbstractComponent} from "./abstract-component.js";
 
 const templateNoData = () => {
   return (
@@ -10,20 +10,12 @@ const templateNoData = () => {
   );
 };
 
-export class NoData {
+export class NoData extends AbstractComponent {
   constructor() {
-    this._element = null;
+    super();
   }
 
   getTemplate() {
     return templateNoData();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
   }
 }

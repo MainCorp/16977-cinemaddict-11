@@ -1,5 +1,8 @@
 import {KEY_ESC} from "../const.js";
-import {retrieveDate, createElement} from "../util.js";
+
+import {retrieveDate} from "../utils/common.js";
+
+import {AbstractComponent} from "./abstract-component.js";
 import {Comment} from "./comments.js";
 
 const generateGenres = (str) => {
@@ -161,10 +164,10 @@ const templateCustomDetailPopup = (data, collectionComments) => {
   );
 };
 
-export class DetailPopup {
+export class DetailPopup extends AbstractComponent {
   constructor(film) {
+    super();
     this._film = film;
-    this._element = null;
   }
 
   _handlerClickClosePopup() {
@@ -201,16 +204,9 @@ export class DetailPopup {
   }
 
   getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate(this._film));
-
-      this._addEventClosePopup();
-    }
+    this._element = super.getElement();
+    this._addEventClosePopup();
 
     return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
