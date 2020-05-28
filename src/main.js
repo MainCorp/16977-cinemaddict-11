@@ -1,7 +1,7 @@
 import {COUNT_FILMS} from "./const.js";
 
 import {HeaderController} from "./controllers/header.js";
-import {PageController} from "./controllers/page.js";
+import {PageController} from "./controllers/main.js";
 import {FooterController} from "./controllers/footer.js";
 
 import {generateFilmList} from "./mock/films.js";
