@@ -1,11 +1,9 @@
 import {AbstractComponent} from "./abstract-component.js";
 
 const templateCustomFooterStatistics = (data) => {
-  const statistics = data.length;
-
   return (
     `<section class="footer__statistics">
-       <p>${statistics} movies inside</p>
+       <p>${data.length} movies inside</p>
      </section>`
   );
 };

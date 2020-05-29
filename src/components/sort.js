@@ -21,6 +21,7 @@ export class Filter extends AbstractComponent {
   constructor() {
     super();
     this._currentType = SORT_TYPE.DEFAULT;
+    this._sortElement = null;
   }
   getTemplate() {
     return templateCustomSort(this._currentType);
@@ -56,10 +57,10 @@ export class Filter extends AbstractComponent {
   setSortChangeHandler(handler) {
     const container = this.getElement();
 
+    this._sortElement = document.querySelector(`a[data-sort-type="${this._currentType}"]`);
+
     container.addEventListener(`click`, (evt) => {
       evt.preventDefault();
-
-      const prevSortElement = container.querySelector(`a[data-sort-type="${this.getSortType()}"]`);
 
       const sortType = evt.target.dataset.sortType;
 
@@ -67,8 +68,14 @@ export class Filter extends AbstractComponent {
         return;
       }
 
-      prevSortElement.classList.remove(`sort__button--active`);
-      evt.target.classList.add(`sort__button--active`);
+      if (this._sortElement) {
+        this._sortElement.classList.remove(`sort__button--active`);
+      }
+
+      if (this._sortElement !== evt.target) {
+        evt.target.classList.add(`sort__button--active`);
+        this._sortElement = evt.target;
+      }
 
       this._currentType = sortType;
       handler(this._currentType);
