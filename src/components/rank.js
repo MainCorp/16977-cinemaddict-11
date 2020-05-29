@@ -10,10 +10,6 @@ const templateCustomRank = () => {
 };
 
 export class Rank extends AbstractComponent {
-  constructor() {
-    super();
-  }
-
   getTemplate() {
     return templateCustomRank();
   }

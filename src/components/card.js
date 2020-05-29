@@ -43,9 +43,9 @@ const templateCustomCard = (data) => {
 };
 
 export class Card extends AbstractComponent {
-  constructor(film) {
+  constructor(cards) {
     super();
-    this._film = film;
+    this._cards = cards;
   }
 
   _addEventOpenPopup() {
@@ -53,7 +53,7 @@ export class Card extends AbstractComponent {
     const title = this._element.querySelector(`.film-card__title`);
     const comments = this._element.querySelector(`.film-card__comments`);
 
-    const popup = new DetailPopup(this._film);
+    const popup = new DetailPopup(this._cards);
 
     poster.addEventListener(`click`, () => {
       this.openPopup(popup);
@@ -69,7 +69,7 @@ export class Card extends AbstractComponent {
   }
 
   getTemplate() {
-    return templateCustomCard(this._film);
+    return templateCustomCard(this._cards);
   }
 
   openPopup(popup) {

@@ -165,9 +165,9 @@ const templateCustomDetailPopup = (data, collectionComments) => {
 };
 
 export class DetailPopup extends AbstractComponent {
-  constructor(film) {
+  constructor(card) {
     super();
-    this._film = film;
+    this._card = card;
   }
 
   _handlerClickClosePopup() {
@@ -200,7 +200,7 @@ export class DetailPopup extends AbstractComponent {
   }
 
   getTemplate() {
-    return templateCustomDetailPopup(this._film, new Comment(this._film.comments).generateCollectionComments());
+    return templateCustomDetailPopup(this._card, new Comment(this._card.comments).generateCollectionComments());
   }
 
   getElement() {

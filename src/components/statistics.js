@@ -1,22 +1,20 @@
 import {AbstractComponent} from "./abstract-component.js";
 
 const templateCustomFooterStatistics = (data) => {
-  const statistics = `<p>` + data.length + ` movies inside</p>`;
-
   return (
     `<section class="footer__statistics">
-       ${statistics}
+       <p>${data.length} movies inside</p>
      </section>`
   );
 };
 
 export class Statistics extends AbstractComponent {
-  constructor(data) {
+  constructor(cards) {
     super();
-    this._data = data;
+    this._cards = cards;
   }
 
   getTemplate() {
-    return templateCustomFooterStatistics(this._data);
+    return templateCustomFooterStatistics(this._cards);
   }
 }

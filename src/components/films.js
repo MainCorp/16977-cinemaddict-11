@@ -14,12 +14,12 @@ const templateCustomFilms = () => {
 };
 
 export class FilmsBoard extends AbstractComponent {
-  constructor(films) {
+  constructor(cards) {
     super();
-    this._films = films;
+    this._cards = cards;
   }
 
   getTemplate() {
-    return templateCustomFilms(this._films);
+    return templateCustomFilms(this._cards);
   }
 }
