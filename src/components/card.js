@@ -1,5 +1,6 @@
-import {retrieveDate, createElement} from "../util.js";
+import {retrieveDate} from "../utils/common.js";
 
+import {AbstractComponent} from "./abstract-component.js";
 import {DetailPopup} from "./detail-popup.js";
 
 const templateCustomCard = (data) => {
@@ -41,11 +42,10 @@ const templateCustomCard = (data) => {
   );
 };
 
-export class Card {
+export class Card extends AbstractComponent {
   constructor(film) {
+    super();
     this._film = film;
-
-    this._element = null;
   }
 
   _addEventOpenPopup() {
@@ -79,17 +79,9 @@ export class Card {
   }
 
   getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-
-      this._addEventOpenPopup();
-    }
+    this._element = super.getElement();
+    this._addEventOpenPopup();
 
     return this._element;
-  }
-
-
-  removeElement() {
-    this._element = null;
   }
 }

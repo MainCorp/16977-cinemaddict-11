@@ -1,4 +1,4 @@
-import {createElement} from "../util.js";
+import {AbstractComponent} from "./abstract-component.js";
 
 const templateCustomSort = () => {
   return (
@@ -10,24 +10,12 @@ const templateCustomSort = () => {
   );
 };
 
-export class Sort {
+export class Filter extends AbstractComponent {
   constructor() {
-    this._element = null;
+    super();
   }
 
   getTemplate() {
     return templateCustomSort();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

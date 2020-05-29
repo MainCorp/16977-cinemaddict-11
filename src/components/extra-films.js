@@ -1,4 +1,4 @@
-import {createElement} from "../util.js";
+import {AbstractComponent} from "./abstract-component.js";
 
 const templateCustomExtraFilms = (title) => {
   return (
@@ -11,25 +11,13 @@ const templateCustomExtraFilms = (title) => {
   );
 };
 
-export class ExtraFilmsBoard {
+export class ExtraFilmsBoard extends AbstractComponent {
   constructor(title) {
+    super();
     this._title = title;
-    this._element = null;
   }
 
   getTemplate() {
     return templateCustomExtraFilms(this._title);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate(this._title));
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

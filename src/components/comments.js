@@ -1,4 +1,6 @@
-import {retrieveDate, createElement} from "../util.js";
+import {retrieveDate} from "../utils/common.js";
+
+import {AbstractComponent} from "./abstract-component.js";
 
 const templateCustomComment = (data) => {
   const date = retrieveDate(data.date);
@@ -25,10 +27,10 @@ const templateCustomComment = (data) => {
   );
 };
 
-export class Comment {
+export class Comment extends AbstractComponent {
   constructor(comment) {
+    super();
     this._comment = comment;
-    this._element = null;
   }
 
   generateCollectionComments() {
@@ -43,17 +45,5 @@ export class Comment {
 
   getTemplate(comments) {
     return templateCustomComment(comments);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate(this._comment));
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

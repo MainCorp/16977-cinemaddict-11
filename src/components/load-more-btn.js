@@ -1,4 +1,7 @@
-import {createElement} from "../util.js";
+import {createSomeCards, render} from "../utils/render.js";
+import {COUNT_SHOW_FILM_ON_START, COUNT_SHOW_FILM_BY_BTN} from "../const.js";
+
+import {AbstractComponent} from "./abstract-component.js";
 
 const templateCustomLoadMoreBtn = () => {
   return (
@@ -6,9 +9,27 @@ const templateCustomLoadMoreBtn = () => {
   );
 };
 
-export class LoadMoreBtn {
-  constructor() {
-    this._element = null;
+export class LoadMoreBtn extends AbstractComponent {
+  constructor(cards) {
+    super();
+    this._cards = cards;
+    this._countFilms = COUNT_SHOW_FILM_ON_START;
+  }
+
+  _addEventShowMore() {
+    this._element.addEventListener(`click`, (evt) => {
+      const container = evt.target.parentElement.querySelector(`.films-list__container`);
+      const prevCountFilm = this._countFilms;
+      this._countFilms += COUNT_SHOW_FILM_BY_BTN;
+
+      const piece = this._cards.slice(prevCountFilm, this._countFilms);
+
+      if (piece.length < COUNT_SHOW_FILM_BY_BTN) {
+        this._element.remove();
+      }
+
+      render(container, createSomeCards(piece));
+    });
   }
 
   getTemplate() {
@@ -16,14 +37,9 @@ export class LoadMoreBtn {
   }
 
   getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
+    this._element = super.getElement();
+    this._addEventShowMore();
 
     return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

@@ -1,4 +1,4 @@
-import {createElement} from "../util.js";
+import {AbstractComponent} from "./abstract-component.js";
 
 const templateCustomMenu = (data) => {
   const countWatchlist = data.filter((item) => {
@@ -27,25 +27,13 @@ const templateCustomMenu = (data) => {
   );
 };
 
-export class Menu {
+export class Menu extends AbstractComponent {
   constructor(films) {
+    super();
     this._films = films;
-    this._element = null;
   }
 
   getTemplate() {
     return templateCustomMenu(this._films);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(templateCustomMenu(this._films));
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
