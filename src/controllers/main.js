@@ -73,9 +73,7 @@ export class PageController {
       this._filter.setSortChangeHandler((sortType) => {
         filmsContainer.innerHTML = ``;
 
-        const showCards = COUNT_SHOW_FILM_ON_START;
-        const sortedCards = this._filter.getSortedCards(cards, sortType, 0, showCards);
-
+        const sortedCards = this._filter.getSortedCards(cards, sortType, 0, COUNT_SHOW_FILM_ON_START);
 
         this._loadMoreBtn.getElement().remove();
         this._loadMoreBtn = new LoadMoreBtn(cards);

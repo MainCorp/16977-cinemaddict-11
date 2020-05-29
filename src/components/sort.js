@@ -59,19 +59,15 @@ export class Filter extends AbstractComponent {
     container.addEventListener(`click`, (evt) => {
       evt.preventDefault();
 
-      const tag = evt.target.tagName;
+      const prevSortElement = container.querySelector(`a[data-sort-type="${this.getSortType()}"]`);
+
       const sortType = evt.target.dataset.sortType;
 
-      if (tag !== `A` || sortType === this._currentType) {
+      if (!sortType || sortType === this._currentType) {
         return;
       }
 
-      const sortItems = container.children;
-
-      for (let i = 0; i < sortItems.length; i++) {
-        sortItems[i].querySelector(`a`).classList.remove(`sort__button--active`);
-      }
-
+      prevSortElement.classList.remove(`sort__button--active`);
       evt.target.classList.add(`sort__button--active`);
 
       this._currentType = sortType;
