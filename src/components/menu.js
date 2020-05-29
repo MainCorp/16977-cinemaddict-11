@@ -28,12 +28,12 @@ const templateCustomMenu = (data) => {
 };
 
 export class Menu extends AbstractComponent {
-  constructor(films) {
+  constructor(cards) {
     super();
-    this._films = films;
+    this._cards = cards;
   }
 
   getTemplate() {
-    return templateCustomMenu(this._films);
+    return templateCustomMenu(this._cards);
   }
 }

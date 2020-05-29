@@ -11,12 +11,12 @@ const templateCustomFooterStatistics = (data) => {
 };
 
 export class Statistics extends AbstractComponent {
-  constructor(data) {
+  constructor(cards) {
     super();
-    this._data = data;
+    this._cards = cards;
   }
 
   getTemplate() {
-    return templateCustomFooterStatistics(this._data);
+    return templateCustomFooterStatistics(this._cards);
   }
 }

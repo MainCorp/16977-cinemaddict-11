@@ -4,8 +4,7 @@ import {
 } from "../const.js";
 
 import {createSomeCards, render} from "../utils/render.js";
-
-import {filterRatedFilms, filterMostCommentedFilms} from "../utils/sort.js";
+import {filterRatedFilms, filterMostCommentedFilms} from "../utils/filters.js";
 
 import {Menu} from "../components/menu.js";
 import {Filter} from "../components/sort.js";
@@ -70,6 +69,20 @@ export class PageController {
         const commentedFilmsContainer = mostCommentedFilms.querySelector(`.films-list__container`);
         render(commentedFilmsContainer, fragmentMostCommentedFilms);
       }
+
+      this._filter.setSortChangeHandler((sortType) => {
+        filmsContainer.innerHTML = ``;
+
+        const showCards = COUNT_SHOW_FILM_ON_START;
+        const sortedCards = this._filter.getSortedCards(cards, sortType, 0, showCards);
+
+
+        this._loadMoreBtn.getElement().remove();
+        this._loadMoreBtn = new LoadMoreBtn(cards);
+
+        render(filmsContainer, createSomeCards(sortedCards));
+        render(filmsLists, this._loadMoreBtn.getElement());
+      });
 
     } else {
       render(this._container, this.noData.getElement());

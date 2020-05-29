@@ -11,10 +11,6 @@ const templateNoData = () => {
 };
 
 export class NoData extends AbstractComponent {
-  constructor() {
-    super();
-  }
-
   getTemplate() {
     return templateNoData();
   }
