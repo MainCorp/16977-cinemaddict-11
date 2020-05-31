@@ -1,5 +1,3 @@
-import {KEY_ESC} from "../const.js";
-
 import {retrieveDate} from "../utils/common.js";
 
 import {AbstractComponent} from "./abstract-component.js";
@@ -170,43 +168,19 @@ export class DetailPopup extends AbstractComponent {
     this._card = card;
   }
 
-  _handlerClickClosePopup() {
-    this.closePopup();
+  setWatchlistButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, handler);
   }
 
-  _handlerKeyClosePopup(evt) {
-    if (evt.keyCode === KEY_ESC) {
-      this.closePopup();
-    }
+  setWatchedButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, handler);
   }
 
-  _addEventClosePopup() {
-    const closePopupBtn = this._element.querySelector(`.film-details__close-btn`);
-
-    this._handlerClickClosePopup = this._handlerClickClosePopup.bind(this);
-    this._handlerKeyClosePopup = this._handlerKeyClosePopup.bind(this);
-
-    closePopupBtn.addEventListener(`click`, this._handlerClickClosePopup);
-    document.addEventListener(`keydown`, this._handlerKeyClosePopup);
-  }
-
-  closePopup() {
-    const bodyPage = document.querySelector(`body`);
-
-    bodyPage.removeChild(this._element);
-
-    document.removeEventListener(`keydown`, this._handlerKeyClosePopup);
-    this._element = null;
+  setFavoriteButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, handler);
   }
 
   getTemplate() {
     return templateCustomDetailPopup(this._card, new Comment(this._card.comments).generateCollectionComments());
-  }
-
-  getElement() {
-    this._element = super.getElement();
-    this._addEventClosePopup();
-
-    return this._element;
   }
 }

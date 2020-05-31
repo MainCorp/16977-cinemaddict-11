@@ -22,6 +22,12 @@ const MAX_COUNT_REVIEWS = 10;
 
 const KEY_ESC = 27;
 
+const SORT_TYPE = {
+  DEFAULT: `default`,
+  DATE: `date`,
+  RATING: `rating`,
+};
+
 export {
   MONTHS,
   COUNT_FILMS,
@@ -29,5 +35,6 @@ export {
   COUNT_SHOW_FILM_ON_START,
   COUNT_SHOW_FILM_BY_BTN,
   MAX_COUNT_REVIEWS,
-  KEY_ESC
+  KEY_ESC,
+  SORT_TYPE
 };

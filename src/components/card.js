@@ -1,7 +1,6 @@
 import {retrieveDate} from "../utils/common.js";
 
 import {AbstractComponent} from "./abstract-component.js";
-import {DetailPopup} from "./detail-popup.js";
 
 const templateCustomCard = (data) => {
   const comments = data.comments;
@@ -43,45 +42,24 @@ const templateCustomCard = (data) => {
 };
 
 export class Card extends AbstractComponent {
-  constructor(cards) {
+  constructor(card) {
     super();
-    this._cards = cards;
+    this._card = card;
   }
 
-  _addEventOpenPopup() {
-    const poster = this._element.querySelector(`.film-card__poster`);
-    const title = this._element.querySelector(`.film-card__title`);
-    const comments = this._element.querySelector(`.film-card__comments`);
+  setWatchlistButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`).addEventListener(`click`, handler);
+  }
 
-    const popup = new DetailPopup(this._cards);
+  setWatchedButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__controls-item--mark-as-watched`).addEventListener(`click`, handler);
+  }
 
-    poster.addEventListener(`click`, () => {
-      this.openPopup(popup);
-    });
-
-    title.addEventListener(`click`, () => {
-      this.openPopup(popup);
-    });
-
-    comments.addEventListener(`click`, () => {
-      this.openPopup(popup);
-    });
+  setFavoriteButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__controls-item--favorite`).addEventListener(`click`, handler);
   }
 
   getTemplate() {
-    return templateCustomCard(this._cards);
-  }
-
-  openPopup(popup) {
-    const bodyPage = document.querySelector(`body`);
-
-    bodyPage.appendChild(popup.getElement());
-  }
-
-  getElement() {
-    this._element = super.getElement();
-    this._addEventOpenPopup();
-
-    return this._element;
+    return templateCustomCard(this._card);
   }
 }
