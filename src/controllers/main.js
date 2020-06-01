@@ -27,6 +27,9 @@ export class PageController {
     this._loadMoreBtn = new LoadMoreBtn();
     this.noData = new NoData();
 
+    this.onDataChange = this._onDataChange.bind(this);
+    this.onViewChange = this._onViewChange.bind(this);
+
     this._cards = [];
     this._showCards = [];
     this._countFilms = COUNT_SHOW_FILM_ON_START;
@@ -116,11 +119,8 @@ export class PageController {
     this._fragmentContainer = document.createDocumentFragment();
 
     for (let j = 0; j < cards.length; j++) {
-      this._movie = new MovieController();
+      this._movie = new MovieController(this._fragmentContainer, this.onDataChange, this.onViewChange);
       this._showCards.push(this._movie);
-
-      this._movie._onDataChange = this._onDataChange.bind(this);
-      this._movie._onViewChange = this._onViewChange.bind(this);
       this._fragmentContainer.appendChild(this._movie.getElement(cards[j]));
     }
 

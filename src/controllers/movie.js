@@ -73,11 +73,11 @@ export class MovieController {
     this._elementCard = this._card.getElement();
     this._elementPopup = this._popup.getElement();
 
-    const updatedWatchlist = this._onDataChange(this, this._card, Object.assign({}, this._card, {"watchlist": Math.random() > 0.5}));
+    const updatedWatchlist = this._onDataChange(this, this._card, Object.assign({}, this._card, {updateWatchlist: Math.random() > 0.5}));
 
-    const updatedWatched = this._onDataChange(this, this._card, Object.assign({}, this._card, {"already_watched": Math.random() > 0.5}));
+    const updatedWatched = this._onDataChange(this, this._card, Object.assign({}, this._card, {updateAlreadyWatched: Math.random() > 0.5}));
 
-    const updatedFavorite = this._onDataChange(this, this._card, Object.assign({}, this._card, {"favorite": Math.random() > 0.5}));
+    const updatedFavorite = this._onDataChange(this, this._card, Object.assign({}, this._card, {updateFavorite: Math.random() > 0.5}));
 
     this._card.setWatchlistButtonClickHandler(updatedWatchlist);
     this._card.setWatchedButtonClickHandler(updatedWatched);
