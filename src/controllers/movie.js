@@ -73,21 +73,31 @@ export class MovieController {
     this._elementCard = this._card.getElement();
     this._elementPopup = this._popup.getElement();
 
-    const update = this._onDataChange(this, this._card, Object.assign({}, this._card, {
+    const updateWatchlist = this._onDataChange(this, this._card, Object.assign({}, this._card, {
       'user_details': {
         'watchlist': Math.random() > 0.5,
+      }
+    }));
+
+    const updateWatched = this._onDataChange(this, this._card, Object.assign({}, this._card, {
+      'user_details': {
         'already_watched': Math.random() > 0.5,
+      }
+    }));
+
+    const updateFavorite = this._onDataChange(this, this._card, Object.assign({}, this._card, {
+      'user_details': {
         'favorite': Math.random() > 0.5,
       }
     }));
 
-    this._card.setWatchlistButtonClickHandler(update);
-    this._card.setWatchedButtonClickHandler(update);
-    this._card.setFavoriteButtonClickHandler(update);
+    this._card.setWatchlistButtonClickHandler(updateWatchlist);
+    this._card.setWatchedButtonClickHandler(updateWatched);
+    this._card.setFavoriteButtonClickHandler(updateFavorite);
 
-    this._card.setWatchlistButtonClickHandler(update);
-    this._popup.setWatchedButtonClickHandler(update);
-    this._popup.setFavoriteButtonClickHandler(update);
+    this._popup.setWatchlistButtonClickHandler(updateWatchlist);
+    this._popup.setWatchedButtonClickHandler(updateWatched);
+    this._popup.setFavoriteButtonClickHandler(updateFavorite);
 
     this._addEventPopup();
 
