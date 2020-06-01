@@ -37,14 +37,14 @@ export class PageController {
   }
 
   _onDataChange(controller, defaultCard, updatedCard) {
-    const index = this._cards.findIndex((card) => card === defaultCard);
+    const index = this._showCards.findIndex((card) => card === defaultCard);
 
     if (index === -1) {
       return;
     }
 
-    this._cards = [].concat(this._card.slice(0, index), updatedCard, this._card.slice(index + 1));
-    controller.render(this._cards);
+    this._showCards = [].concat(this._showCards.slice(0, index), updatedCard, this._showCards.slice(index + 1));
+    controller.render(this._showCards);
   }
 
   _onViewChange() {
