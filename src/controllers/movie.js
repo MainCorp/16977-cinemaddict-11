@@ -73,23 +73,35 @@ export class MovieController {
     this._elementCard = this._card.getElement();
     this._elementPopup = this._popup.getElement();
 
-    const updateWatchlist = this._onDataChange(this, this._card, Object.assign({}, this._card, {
-      'user_details': {
-        'watchlist': Math.random() > 0.5,
-      }
-    }));
+    const updateWatchlist = (evt) => {
+      evt.preventDefault();
 
-    const updateWatched = this._onDataChange(this, this._card, Object.assign({}, this._card, {
-      'user_details': {
-        'already_watched': Math.random() > 0.5,
-      }
-    }));
+      this._onDataChange(this, this._card, Object.assign({}, this._card, {
+        'user_details': {
+          'watchlist': !this._card.user_details.watchlist,
+        }
+      }));
+    };
 
-    const updateFavorite = this._onDataChange(this, this._card, Object.assign({}, this._card, {
-      'user_details': {
-        'favorite': Math.random() > 0.5,
-      }
-    }));
+    const updateWatched = (evt) => {
+      evt.preventDefault();
+
+      this._onDataChange(this, this._card, Object.assign({}, this._card, {
+        'user_details': {
+          'already_watched': !this._card.user_details.already_watched,
+        }
+      }));
+    };
+
+    const updateFavorite = (evt) => {
+      evt.preventDefault();
+
+      this._onDataChange(this, this._card, Object.assign({}, this._card, {
+        'user_details': {
+          'favorite': !this._card.user_details.favorite,
+        }
+      }));
+    };
 
     this._card.setWatchlistButtonClickHandler(updateWatchlist);
     this._card.setWatchedButtonClickHandler(updateWatched);
