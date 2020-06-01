@@ -73,19 +73,21 @@ export class MovieController {
     this._elementCard = this._card.getElement();
     this._elementPopup = this._popup.getElement();
 
-    const updatedWatchlist = this._onDataChange(this, this._card, Object.assign({}, this._card, {updateWatchlist: Math.random() > 0.5}));
+    const update = this._onDataChange(this, this._card, Object.assign({}, this._card, {
+      'user_details': {
+        'watchlist': Math.random() > 0.5,
+        'already_watched': Math.random() > 0.5,
+        'favorite': Math.random() > 0.5,
+      }
+    }));
 
-    const updatedWatched = this._onDataChange(this, this._card, Object.assign({}, this._card, {updateAlreadyWatched: Math.random() > 0.5}));
+    this._card.setWatchlistButtonClickHandler(update);
+    this._card.setWatchedButtonClickHandler(update);
+    this._card.setFavoriteButtonClickHandler(update);
 
-    const updatedFavorite = this._onDataChange(this, this._card, Object.assign({}, this._card, {updateFavorite: Math.random() > 0.5}));
-
-    this._card.setWatchlistButtonClickHandler(updatedWatchlist);
-    this._card.setWatchedButtonClickHandler(updatedWatched);
-    this._card.setFavoriteButtonClickHandler(updatedFavorite);
-
-    this._card.setWatchlistButtonClickHandler(updatedWatchlist);
-    this._popup.setWatchedButtonClickHandler(updatedWatched);
-    this._popup.setFavoriteButtonClickHandler(updatedFavorite);
+    this._card.setWatchlistButtonClickHandler(update);
+    this._popup.setWatchedButtonClickHandler(update);
+    this._popup.setFavoriteButtonClickHandler(update);
 
     this._addEventPopup();
 

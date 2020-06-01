@@ -47,6 +47,7 @@ export class PageController {
     }
 
     this._showCards = [].concat(this._showCards.slice(0, index), updatedCard, this._showCards.slice(index + 1));
+
     controller.render(this._showCards);
   }
 
