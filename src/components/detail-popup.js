@@ -166,18 +166,30 @@ export class DetailPopup extends AbstractSmartComponent {
   constructor(card) {
     super();
     this._card = card;
-    this._pressedEmoji = null;
+    this._oldEmoji = null;
+  }
+
+  _createEmoji(button) {
+    const emojiElement = document.createElement(`img`);
+    emojiElement.src = `images/emoji/${button.value}.png`;
+    emojiElement.width = 55;
+    emojiElement.height = 55;
+    emojiElement.alt = button.id;
+
+    return emojiElement;
   }
 
   _subscribeOnEvents() {
     const collectionEmoji = this._element.querySelectorAll(`.film-details__emoji-item`);
+    const container = this._element.querySelector(`.film-details__add-emoji-label`);
 
     collectionEmoji.forEach((button) => {
       button.addEventListener(`click`, (evt) => {
         evt.preventDefault();
 
-        this._pressedEmoji = button.value;
-        this.rerender();
+        this.rerender(container, this._oldEmoji, this._createEmoji(button));
+
+        this._oldEmoji = this._createEmoji(button);
       });
     });
   }

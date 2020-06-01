@@ -73,6 +73,8 @@ export class MovieController {
     this._elementCard = this._card.getElement();
     this._elementPopup = this._popup.getElement();
 
+    this._popup._subscribeOnEvents();
+
     const updateWatchlist = (evt) => {
       evt.preventDefault();
 
