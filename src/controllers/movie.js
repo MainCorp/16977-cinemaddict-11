@@ -76,9 +76,9 @@ export class MovieController {
     const updateWatchlist = (evt) => {
       evt.preventDefault();
 
-      this._onDataChange(this, this._card, Object.assign({}, this._card, {
+      this._onDataChange(this, this._card, Object.assign({}, card, {
         'user_details': {
-          'watchlist': !this._card.user_details.watchlist,
+          'watchlist': !card.user_details.watchlist,
         }
       }));
     };
@@ -86,9 +86,9 @@ export class MovieController {
     const updateWatched = (evt) => {
       evt.preventDefault();
 
-      this._onDataChange(this, this._card, Object.assign({}, this._card, {
+      this._onDataChange(this, this._card, Object.assign({}, card, {
         'user_details': {
-          'already_watched': !this._card.user_details.already_watched,
+          'already_watched': !card.user_details.already_watched,
         }
       }));
     };
@@ -96,9 +96,9 @@ export class MovieController {
     const updateFavorite = (evt) => {
       evt.preventDefault();
 
-      this._onDataChange(this, this._card, Object.assign({}, this._card, {
+      this._onDataChange(this, this._card, Object.assign({}, card, {
         'user_details': {
-          'favorite': !this._card.user_details.favorite,
+          'favorite': !card.user_details.favorite,
         }
       }));
     };
