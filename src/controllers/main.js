@@ -23,17 +23,20 @@ export class PageController {
     this._defaultMovie = null;
     this._ratedMovie = null;
     this._commentedMovie = null;
+    this._movie = null;
     this._loadMoreBtn = new LoadMoreBtn();
     this.noData = new NoData();
 
     this._cards = [];
+    this._showCards = [];
     this._countFilms = COUNT_SHOW_FILM_ON_START;
 
     this._currentType = SORT_TYPE.DEFAULT;
     this._sortElement = null;
+    this._fragmentContainer = null;
   }
 
-  _onDataChange(defaultCard, updatedCard) {
+  _onDataChange(controller, defaultCard, updatedCard) {
     const index = this._cards.findIndex((card) => card === defaultCard);
 
     if (index === -1) {
@@ -41,7 +44,11 @@ export class PageController {
     }
 
     this._cards = [].concat(this._card.slice(0, index), updatedCard, this._card.slice(index + 1));
-    // тут должен быть рендер 1 карточки фильма
+    controller.render(this._cards);
+  }
+
+  _onViewChange() {
+    this._showCards.forEach((card) => card.setDefaultView());
   }
 
   getSortedCards() {
@@ -106,17 +113,20 @@ export class PageController {
   }
 
   getCardsElements(cards) {
-    let fragment = document.createDocumentFragment();
+    this._fragmentContainer = document.createDocumentFragment();
 
     for (let j = 0; j < cards.length; j++) {
-      const movie = new MovieController();
+      this._movie = new MovieController();
+      this._showCards.push(this._movie);
 
-      movie._onDataChange = this._onDataChange.bind(this);
-      fragment.appendChild(movie.getElement(cards[j]));
+      this._movie._onDataChange = this._onDataChange.bind(this);
+      this._movie._onViewChange = this._onViewChange.bind(this);
+      this._fragmentContainer.appendChild(this._movie.getElement(cards[j]));
     }
 
-    return fragment;
+    return this._fragmentContainer;
   }
+
 
   handlerShowCardsButtonClick(evt) {
     const container = evt.target.parentElement.querySelector(`.films-list__container`);

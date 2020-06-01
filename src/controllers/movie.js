@@ -5,7 +5,7 @@ import {Card} from "../components/card.js";
 import {DetailPopup} from "../components/detail-popup.js";
 
 export class MovieController {
-  constructor(container, onDataChange) {
+  constructor(container, onDataChange, onViewChange) {
     this._container = container;
 
     this._card = null;
@@ -15,6 +15,9 @@ export class MovieController {
     this._elementPopup = null;
 
     this._onDataChange = onDataChange;
+    this._onViewChange = onViewChange;
+
+    this._body = null;
   }
 
   _handlerClickClosePopup() {
@@ -28,17 +31,16 @@ export class MovieController {
   }
 
   closePopup() {
-    const bodyPage = document.querySelector(`body`);
-
-    bodyPage.removeChild(this._elementPopup);
+    this._body = document.querySelector(`body`);
+    this._body.removeChild(this._elementPopup);
 
     document.removeEventListener(`keydown`, this._handlerKeyClosePopup);
   }
 
   _handlerOpenPopup() {
-    const bodyPage = document.querySelector(`body`);
+    this._onViewChange();
 
-    bodyPage.appendChild(this._elementPopup);
+    this._body.appendChild(this._elementPopup);
 
     this._addEventClosePopup();
   }
@@ -71,11 +73,11 @@ export class MovieController {
     this._elementCard = this._card.getElement();
     this._elementPopup = this._popup.getElement();
 
-    const updatedWatchlist = this._onDataChange(this._card, Object.assign({}, this._card, {"watchlist": Math.random() > 0.5}));
+    const updatedWatchlist = this._onDataChange(this, this._card, Object.assign({}, this._card, {"watchlist": Math.random() > 0.5}));
 
-    const updatedWatched = this._onDataChange(this._card, Object.assign({}, this._card, {"already_watched": Math.random() > 0.5}));
+    const updatedWatched = this._onDataChange(this, this._card, Object.assign({}, this._card, {"already_watched": Math.random() > 0.5}));
 
-    const updatedFavorite = this._onDataChange(this._card, Object.assign({}, this._card, {"favorite": Math.random() > 0.5}));
+    const updatedFavorite = this._onDataChange(this, this._card, Object.assign({}, this._card, {"favorite": Math.random() > 0.5}));
 
     this._card.setWatchlistButtonClickHandler(updatedWatchlist);
     this._card.setWatchedButtonClickHandler(updatedWatched);
@@ -88,6 +90,14 @@ export class MovieController {
     this._addEventPopup();
 
     return this._elementCard;
+  }
+
+  setDefaultView() {
+    this._body = document.querySelector(`body`);
+
+    if (this._body.contains(this._elementPopup)) {
+      this.closePopup();
+    }
   }
 
   render(card) {

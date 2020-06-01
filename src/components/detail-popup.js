@@ -1,6 +1,6 @@
 import {retrieveDate} from "../utils/common.js";
 
-import {AbstractComponent} from "./abstract-component.js";
+import {AbstractSmartComponent} from "./abstract-smart-component.js";
 import {Comment} from "./comments.js";
 
 const generateGenres = (str) => {
@@ -162,10 +162,28 @@ const templateCustomDetailPopup = (data, collectionComments) => {
   );
 };
 
-export class DetailPopup extends AbstractComponent {
+export class DetailPopup extends AbstractSmartComponent {
   constructor(card) {
     super();
     this._card = card;
+    this._pressedEmoji = null;
+  }
+
+  _subscribeOnEvents() {
+    const collectionEmoji = this._element.querySelectorAll(`.film-details__emoji-item`);
+
+    collectionEmoji.forEach((button) => {
+      button.addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+
+        this._pressedEmoji = button.value;
+        this.rerender();
+      });
+    });
+  }
+
+  recoveryListeners() {
+    this._subscribeOnEvents();
   }
 
   setWatchlistButtonClickHandler(handler) {
