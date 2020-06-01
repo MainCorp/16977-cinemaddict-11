@@ -67,18 +67,18 @@ export class MovieController {
     comments.addEventListener(`click`, this._handlerOpenPopup);
   }
 
-  getElement(card) {
-    this._card = new Card(card);
-    this._popup = new DetailPopup(card);
+  getElement(dataCard) {
+    this._card = new Card(dataCard);
+    this._popup = new DetailPopup(dataCard);
     this._elementCard = this._card.getElement();
     this._elementPopup = this._popup.getElement();
 
     const updateWatchlist = (evt) => {
       evt.preventDefault();
 
-      this._onDataChange(this, this._card, Object.assign({}, card, {
+      this._onDataChange(this, this._card, Object.assign({}, dataCard, {
         'user_details': {
-          'watchlist': !card.user_details.watchlist,
+          'watchlist': !dataCard.user_details.watchlist,
         }
       }));
     };
@@ -86,9 +86,9 @@ export class MovieController {
     const updateWatched = (evt) => {
       evt.preventDefault();
 
-      this._onDataChange(this, this._card, Object.assign({}, card, {
+      this._onDataChange(this, this._card, Object.assign({}, dataCard, {
         'user_details': {
-          'already_watched': !card.user_details.already_watched,
+          'already_watched': !dataCard.user_details.already_watched,
         }
       }));
     };
@@ -96,9 +96,9 @@ export class MovieController {
     const updateFavorite = (evt) => {
       evt.preventDefault();
 
-      this._onDataChange(this, this._card, Object.assign({}, card, {
+      this._onDataChange(this, this._card, Object.assign({}, dataCard, {
         'user_details': {
-          'favorite': !card.user_details.favorite,
+          'favorite': !dataCard.user_details.favorite,
         }
       }));
     };
