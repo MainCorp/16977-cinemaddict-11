@@ -1,7 +1,8 @@
+import moment from "moment";
+
 import {COUNT_EXTRA_FILMS, COUNT_SHOW_FILM_ON_START, COUNT_SHOW_FILM_BY_BTN, SORT_TYPE} from "../const.js";
 
 import {render} from "../utils/render.js";
-import {retrieveDate} from "../utils/common.js";
 import {filterRatedFilms, filterMostCommentedFilms} from "../utils/filters.js";
 
 import {Menu} from "../components/menu.js";
@@ -11,6 +12,7 @@ import {ExtraFilmsBoard} from "../components/extra-films.js";
 import {LoadMoreBtn} from "../components/load-more-btn.js";
 import {NoData} from "../components/no-data.js";
 import {MovieController} from "./movie.js";
+import {Card} from "../components/card.js";
 
 export class PageController {
   constructor(container) {
@@ -40,15 +42,30 @@ export class PageController {
   }
 
   _onDataChange(controller, defaultCard, updatedCard) {
-    const index = this._showCards.findIndex((card) => card === defaultCard);
+    const index = this._showCards.findIndex((card) => {
+      return card._card === defaultCard;
+    });
 
     if (index === -1) {
       return;
     }
 
-    this._showCards = [].concat(this._showCards.slice(0, index), updatedCard, this._showCards.slice(index + 1));
+    const newCard = new MovieController(controller._container, this.onDataChange, this.onViewChange);
+    newCard._card = new Card(updatedCard);
+    newCard.setDefaultView();
 
-    controller.render(this._showCards);
+    this._showCards = [].concat(this._showCards.slice(0, index), newCard, this._showCards.slice(index + 1));
+
+    this._fragmentContainer = document.createDocumentFragment();
+
+    for (let count = 0; count < this._showCards.length; count++) {
+      if (controller._container === this._showCards[count]._container) {
+        controller._container.innerHTML = ``;
+        this._fragmentContainer.appendChild(this._showCards[count].getElement(this._showCards[count]._card._card));
+      }
+    }
+
+    render(controller._container, this._fragmentContainer);
   }
 
   _onViewChange() {
@@ -65,7 +82,7 @@ export class PageController {
         break;
       case SORT_TYPE.DATE:
         sortedCards = showingCards.sort((a, b) => {
-          return retrieveDate(b.film_info.release.date).year - retrieveDate(a.film_info.release.date).year;
+          return Number(moment(b.film_info.release.date).format(`YYYY`)) - Number(moment(a.film_info.release.date).format(`YYYY`));
         });
         break;
       case SORT_TYPE.RATING:
@@ -111,16 +128,16 @@ export class PageController {
     this._countFilms = COUNT_SHOW_FILM_ON_START;
     this._loadMoreBtn._addEventShowMore(this.handlerShowCardsButtonClick.bind(this));
 
-    this._defaultMovie.render(this.getCardsElements(this.getSortedCards()));
+    this._defaultMovie.render(this.getCardsElements(filmsLists, this.getSortedCards()));
 
     render(filmsLists, this._loadMoreBtn.getElement());
   }
 
-  getCardsElements(cards) {
+  getCardsElements(container, cards) {
     this._fragmentContainer = document.createDocumentFragment();
 
     for (let j = 0; j < cards.length; j++) {
-      this._movie = new MovieController(this._fragmentContainer, this.onDataChange, this.onViewChange);
+      this._movie = new MovieController(container, this.onDataChange, this.onViewChange);
       this._showCards.push(this._movie);
       this._fragmentContainer.appendChild(this._movie.getElement(cards[j]));
     }
@@ -140,7 +157,7 @@ export class PageController {
       this._loadMoreBtn.getElement().remove();
     }
 
-    render(container, this.getCardsElements(piece));
+    render(container, this.getCardsElements(container, piece));
   }
 
   render(cards) {
@@ -172,7 +189,7 @@ export class PageController {
     render(this._container, content);
 
     this._defaultMovie = new MovieController(filmsContainer);
-    this._defaultMovie.render(this.getCardsElements(collectionFilmsOnStart));
+    this._defaultMovie.render(this.getCardsElements(filmsContainer, collectionFilmsOnStart));
 
     const filmsWrap = this._container.querySelector(`.films`);
     const filmsLists = filmsWrap.querySelector(`.films-list`);
@@ -183,7 +200,7 @@ export class PageController {
     if (topRatedFilms) {
       const ratedFilmsContainer = topRatedFilms.querySelector(`.films-list__container`);
       this._ratedMovie = new MovieController(ratedFilmsContainer);
-      this._ratedMovie.render(this.getCardsElements(collectionRatedFilms));
+      this._ratedMovie.render(this.getCardsElements(ratedFilmsContainer, collectionRatedFilms));
     }
 
     render(filmsWrap, mostCommentedFilms);
@@ -191,7 +208,7 @@ export class PageController {
     if (mostCommentedFilms) {
       const commentedFilmsContainer = mostCommentedFilms.querySelector(`.films-list__container`);
       this._commentedMovie = new MovieController(commentedFilmsContainer);
-      this._commentedMovie.render(this.getCardsElements(collectionCommentedFilms));
+      this._commentedMovie.render(this.getCardsElements(commentedFilmsContainer, collectionCommentedFilms));
     }
   }
 }

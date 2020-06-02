@@ -8,6 +8,8 @@ export class AbstractSmartComponent extends AbstractComponent {
   rerender(container, oldElement, newElement) {
     if (!oldElement) {
       container.appendChild(newElement);
+
+      this.recoveryListeners();
       return;
     }
 

@@ -107,17 +107,10 @@ const generateReviews = (count) => {
   return new Array(randomCountReview).fill(``).map(generateReview);
 };
 
-const createRuntime = (num) => {
-  const hours = Math.floor(num / 60);
-  const minutes = num % 60;
-
-  return hours > 0 ? hours + `h ` + minutes + `m` : minutes + `m`;
-};
-
 const generateFilm = () => {
   const title = filmNames[Math.floor(Math.random() * filmNames.length)];
   const comments = generateReviews(MAX_COUNT_REVIEWS);
-  const runtime = createRuntime(getRandomNumber(20, 240));
+  const runtime = getRandomNumber(20, 240);
   const writers = createRandomCollection(writersList, 1, writersList.length);
   const actors = createRandomCollection(actorsList, 1, actorsList.length);
   const genre = createRandomCollection(genreList, 1, genreList.length);

@@ -1,4 +1,4 @@
-import {retrieveDate} from "../utils/common.js";
+import moment from "moment";
 
 import {AbstractComponent} from "./abstract-component.js";
 
@@ -8,13 +8,12 @@ const templateCustomCard = (data) => {
 
   const title = data.film_info.title;
   const rating = data.film_info.total_rating;
-  const runtime = data.film_info.runtime;
+  const runtime = moment.utc(moment.duration(data.film_info.runtime, `minutes`).as(`milliseconds`)).format(`H[h] mm[m]`);
   const genre = data.film_info.genre.join(`, `);
   const poster = data.film_info.poster;
   const description = data.film_info.description;
 
-  const date = retrieveDate(data.film_info.release.date);
-  const year = date.year;
+  const year = moment(data.film_info.release.date).format(`YYYY`);
 
   const isAlreadyWatched = data.user_details.already_watched ? `film-card__controls-item--active` : ``;
   const isWatchlist = data.user_details.watchlist ? `film-card__controls-item--active` : ``;
@@ -33,8 +32,8 @@ const templateCustomCard = (data) => {
       <p class="film-card__description">${description}</p>
       <a class="film-card__comments">${countComments} comments</a>
       <form class="film-card__controls">
-        <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${isAlreadyWatched}">Add to watchlist</button>
-        <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${isWatchlist}">Mark as watched</button>
+        <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${isWatchlist}">Add to watchlist</button>
+        <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${isAlreadyWatched}">Mark as watched</button>
         <button class="film-card__controls-item button film-card__controls-item--favorite ${isFavorite}">Mark as favorite</button>
       </form>
     </article>`

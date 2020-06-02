@@ -3,6 +3,7 @@ import {render} from "../utils/render.js";
 
 import {Card} from "../components/card.js";
 import {DetailPopup} from "../components/detail-popup.js";
+import {Emoji} from "../components/emoji.js";
 
 export class MovieController {
   constructor(container, onDataChange, onViewChange) {
@@ -10,12 +11,19 @@ export class MovieController {
 
     this._card = null;
     this._popup = null;
+    this._emoji = null;
+    this._filmData = null;
+    this._currentEmoji = null;
 
     this._elementCard = null;
     this._elementPopup = null;
 
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
+
+    this._updateWatchlist = null;
+    this._updateWatched = null;
+    this._updateFavorite = null;
 
     this._body = null;
   }
@@ -35,10 +43,26 @@ export class MovieController {
     this._body.removeChild(this._elementPopup);
 
     document.removeEventListener(`keydown`, this._handlerKeyClosePopup);
+    this._elementPopup = null;
   }
 
   _handlerOpenPopup() {
     this._onViewChange();
+
+    this._popup = new DetailPopup(this._filmData);
+    this._elementPopup = this._popup.getElement();
+
+    this._popup.setWatchlistButtonClickHandler(this._updateWatchlist);
+    this._popup.setWatchedButtonClickHandler(this._updateWatched);
+    this._popup.setFavoriteButtonClickHandler(this._updateFavorite);
+
+    this._emoji = new Emoji();
+    this._emoji.setCurrentElement(this._currentEmoji);
+
+    this._emojiElement = this._emoji.getElement();
+
+    this._popup.addEmojiButtons(this._emojiElement);
+    this._popup._subscribeOnEvents();
 
     this._body.appendChild(this._elementPopup);
 
@@ -68,50 +92,50 @@ export class MovieController {
   }
 
   getElement(filmData) {
-    this._card = new Card(filmData);
-    this._popup = new DetailPopup(filmData);
+    this._filmData = filmData;
+    this._card = new Card(this._filmData);
+
     this._elementCard = this._card.getElement();
-    this._elementPopup = this._popup.getElement();
 
-    this._popup._subscribeOnEvents();
-
-    const updateWatchlist = (evt) => {
+    this._updateWatchlist = (evt) => {
       evt.preventDefault();
 
-      this._onDataChange(this, this._card, Object.assign({}, filmData, {
+      this._onDataChange(this, this._card, Object.assign({}, this._filmData, {
         'user_details': {
-          'watchlist': !filmData.user_details.watchlist,
+          'watchlist': !this._filmData.user_details.watchlist,
+          'already_watched': this._filmData.user_details.already_watched,
+          'favorite': this._filmData.user_details.favorite,
         }
       }));
     };
 
-    const updateWatched = (evt) => {
+    this._updateWatched = (evt) => {
       evt.preventDefault();
 
-      this._onDataChange(this, this._card, Object.assign({}, filmData, {
+      this._onDataChange(this, this._card, Object.assign({}, this._filmData, {
         'user_details': {
-          'already_watched': !filmData.user_details.already_watched,
+          'watchlist': this._filmData.user_details.watchlist,
+          'already_watched': !this._filmData.user_details.already_watched,
+          'favorite': this._filmData.user_details.favorite,
         }
       }));
     };
 
-    const updateFavorite = (evt) => {
+    this._updateFavorite = (evt) => {
       evt.preventDefault();
 
-      this._onDataChange(this, this._card, Object.assign({}, filmData, {
+      this._onDataChange(this, this._card, Object.assign({}, this._filmData, {
         'user_details': {
-          'favorite': !filmData.user_details.favorite,
+          'watchlist': this._filmData.user_details.watchlist,
+          'already_watched': this._filmData.user_details.already_watched,
+          'favorite': !this._filmData.user_details.favorite,
         }
       }));
     };
 
-    this._card.setWatchlistButtonClickHandler(updateWatchlist);
-    this._card.setWatchedButtonClickHandler(updateWatched);
-    this._card.setFavoriteButtonClickHandler(updateFavorite);
-
-    this._popup.setWatchlistButtonClickHandler(updateWatchlist);
-    this._popup.setWatchedButtonClickHandler(updateWatched);
-    this._popup.setFavoriteButtonClickHandler(updateFavorite);
+    this._card.setWatchlistButtonClickHandler(this._updateWatchlist);
+    this._card.setWatchedButtonClickHandler(this._updateWatched);
+    this._card.setFavoriteButtonClickHandler(this._updateFavorite);
 
     this._addEventPopup();
 
