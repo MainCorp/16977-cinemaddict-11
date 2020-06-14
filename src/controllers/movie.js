@@ -50,15 +50,15 @@ export class MovieController {
     this._onViewChange();
 
     this._popup = new DetailPopup(this._filmData);
-    this._elementPopup = this._popup.getElement();
+    this._emoji = new Emoji();
 
     this._popup.setWatchlistButtonClickHandler(this._updateWatchlist);
     this._popup.setWatchedButtonClickHandler(this._updateWatched);
     this._popup.setFavoriteButtonClickHandler(this._updateFavorite);
 
-    this._emoji = new Emoji();
-    this._emoji.setCurrentElement(this._currentEmoji);
+    this._elementPopup = this._popup.getElement();
 
+    this._emoji.setCurrentElement(this._currentEmoji);
     this._emojiElement = this._emoji.getElement();
 
     this._popup.addEmojiButtons(this._emojiElement);
@@ -94,8 +94,6 @@ export class MovieController {
   getElement(filmData) {
     this._filmData = filmData;
     this._card = new Card(this._filmData);
-
-    this._elementCard = this._card.getElement();
 
     this._updateWatchlist = (evt) => {
       evt.preventDefault();
@@ -136,6 +134,8 @@ export class MovieController {
     this._card.setWatchlistButtonClickHandler(this._updateWatchlist);
     this._card.setWatchedButtonClickHandler(this._updateWatched);
     this._card.setFavoriteButtonClickHandler(this._updateFavorite);
+
+    this._elementCard = this._card.getElement();
 
     this._addEventPopup();
 

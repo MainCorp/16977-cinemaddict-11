@@ -12,7 +12,6 @@ import {ExtraFilmsBoard} from "../components/extra-films.js";
 import {LoadMoreBtn} from "../components/load-more-btn.js";
 import {NoData} from "../components/no-data.js";
 import {MovieController} from "./movie.js";
-import {Card} from "../components/card.js";
 
 export class PageController {
   constructor(container) {
@@ -41,7 +40,7 @@ export class PageController {
     this._fragmentContainer = null;
   }
 
-  _onDataChange(controller, defaultCard, updatedCard) {
+  _onDataChange(currentMovie, defaultCard, updatedCard) {
     const index = this._showCards.findIndex((card) => {
       return card._card === defaultCard;
     });
@@ -50,22 +49,18 @@ export class PageController {
       return;
     }
 
-    const newCard = new MovieController(controller._container, this.onDataChange, this.onViewChange);
-    newCard._card = new Card(updatedCard);
-    newCard.setDefaultView();
+    const container = currentMovie._container;
+    const defaultCardElement = defaultCard.getElement();
+    const newCardElement = currentMovie.getElement(updatedCard);
 
-    this._showCards = [].concat(this._showCards.slice(0, index), newCard, this._showCards.slice(index + 1));
+    this._showCards = [].concat(this._showCards.slice(0, index), currentMovie, this._showCards.slice(index + 1));
 
-    this._fragmentContainer = document.createDocumentFragment();
+    // this._cards[index] = updatedCard;
 
-    for (let count = 0; count < this._showCards.length; count++) {
-      if (controller._container === this._showCards[count]._container) {
-        controller._container.innerHTML = ``;
-        this._fragmentContainer.appendChild(this._showCards[count].getElement(this._showCards[count]._card._card));
-      }
-    }
+    // console.log(index);
+    // console.log(this._cards);
 
-    render(controller._container, this._fragmentContainer);
+    container.replaceChild(newCardElement, defaultCardElement);
   }
 
   _onViewChange() {
@@ -92,7 +87,7 @@ export class PageController {
         break;
     }
 
-    return sortedCards.slice(0, COUNT_SHOW_FILM_ON_START);
+    return sortedCards;
   }
 
   sortChangeHandler(evt) {
@@ -128,13 +123,16 @@ export class PageController {
     this._countFilms = COUNT_SHOW_FILM_ON_START;
     this._loadMoreBtn._addEventShowMore(this.handlerShowCardsButtonClick.bind(this));
 
-    this._defaultMovie.render(this.getCardsElements(filmsLists, this.getSortedCards()));
+    const pieceSortedCards = this.getSortedCards().slice(0, COUNT_SHOW_FILM_ON_START);
 
+    this._defaultMovie.render(this.getCardsElements(filmsListsContainer, pieceSortedCards));
     render(filmsLists, this._loadMoreBtn.getElement());
   }
 
   getCardsElements(container, cards) {
     this._fragmentContainer = document.createDocumentFragment();
+
+    console.log( this._showCards);
 
     for (let j = 0; j < cards.length; j++) {
       this._movie = new MovieController(container, this.onDataChange, this.onViewChange);
